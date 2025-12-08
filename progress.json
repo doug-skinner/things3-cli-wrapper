@@ -1,0 +1,119 @@
+[
+  {
+    "id": 1,
+    "title": "Set up TypeScript build system and development environment",
+    "description": "Configure TypeScript compilation for the project. Create tsconfig.json with appropriate compiler options (target ES2020 or later, module commonjs for Node.js, strict type checking enabled, declaration files for types). Set up npm scripts for build (compile TypeScript to JavaScript), clean (remove build artifacts), and watch mode (continuous compilation during development). Configure output directory (dist/). Set up source maps for debugging. Ensure compiled code is compatible with Node.js CLI execution. Configure npm package.json main entry point to compiled JavaScript. Add build artifacts to .gitignore.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:25:36.479Z",
+    "updated": "2025-12-08T20:25:36.479Z"
+  },
+  {
+    "id": 2,
+    "title": "Configure package.json with scoped package name and metadata",
+    "description": "Create package.json with name '@dougskinner/thangs'. Set version to 0.1.0 for initial release. Add description: 'A CLI wrapper around Things 3, built in TypeScript'. Set author and license (MIT suggested). Configure bin entry: 'thangs' pointing to compiled CLI entry point. Add dependencies: commander, run-applescript, chalk, cli-table3. Add devDependencies: typescript, @types/node, biome. Define npm scripts: build, clean, dev (watch mode), lint, format. Set engines to specify minimum Node.js version (16+ recommended). Add keywords for npm discoverability: things3, cli, task-manager, todo, typescript, macos. Set repository and bugs URLs. Configure files array to include only necessary files in published package (dist/, README.md, LICENSE). Set main entry to compiled JavaScript file.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:25:53.352Z",
+    "updated": "2025-12-08T20:25:53.352Z"
+  },
+  {
+    "id": 3,
+    "title": "Integrate Commander.js for CLI command structure",
+    "description": "Set up Commander.js as the CLI framework for the thangs tool. Install Commander.js dependency. Create main CLI entry point that configures Commander program with tool name, version, and description. Define command structure for all commands (list, add, edit, complete, cancel, add-project, add-area). Configure command arguments and options using Commander's API (positional args, flags, option parsing). Set up help text generation for each command. Configure version flag. Set up proper error handling for unknown commands and invalid arguments. Ensure CLI is executable via 'thangs' global command after npm install. Add shebang for Node.js execution.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:26:07.214Z",
+    "updated": "2025-12-08T20:26:07.214Z"
+  },
+  {
+    "id": 4,
+    "title": "Set up AppleScript integration using run-applescript package",
+    "description": "Install and configure the run-applescript npm package as the bridge between Node.js and Things 3 AppleScript API. Create utility module for executing AppleScript commands and handling responses. Implement error handling for AppleScript execution failures (Things 3 not running, permission issues, script errors). Create TypeScript type definitions for AppleScript responses from Things 3. Implement async/await wrapper around run-applescript for cleaner command implementation. Add appropriate error messages when Things 3 is not installed or not accessible. Document AppleScript integration approach in code comments referencing Things 3 AppleScript Dictionary.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:26:20.434Z",
+    "updated": "2025-12-08T20:26:20.434Z"
+  },
+  {
+    "id": 5,
+    "title": "Implement colored table output for list command",
+    "description": "Create formatted table view for displaying tasks using cli-table3 library. Implement colorization for output using chalk library. Color-code different elements: task names (white/default), projects (blue), areas (green), tags (yellow), due dates (red for overdue, yellow for soon, white for future). Display tasks in tabular format with columns for: task name, project, area, tags, due date, status. Auto-size columns based on terminal width. Add proper padding and borders for readability. Ensure colors work with both light and dark terminal themes. Make color output respect NO_COLOR environment variable and --no-color flag for accessibility.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:26:34.639Z",
+    "updated": "2025-12-08T20:26:34.639Z"
+  },
+  {
+    "id": 6,
+    "title": "Implement 'list' command for displaying tasks",
+    "description": "Create the list command that displays all tasks from Things 3. Support basic listing without filters to show all tasks. Implement --list flag to filter by built-in Things 3 lists (Today, Upcoming, Anytime, Someday). Implement --project flag to filter tasks by project name. Implement --area flag to filter tasks by area name. Implement --tag flag to filter tasks by tag name. Use Things 3 AppleScript API via run-applescript to retrieve task data. Format output using colored table view. Handle cases where Things 3 is not running or not installed with appropriate error messages.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:26:48.880Z",
+    "updated": "2025-12-08T20:26:48.880Z"
+  },
+  {
+    "id": 7,
+    "title": "Implement 'add' command for creating tasks",
+    "description": "Create the add command that creates new tasks in Things 3 Inbox. Accept task name as required positional argument. Support optional --notes flag for task notes. Support optional --due flag for due date (accept date string in YYYY-MM-DD format). Support optional --tags flag accepting comma-separated list of tags. Support optional --project flag to assign task to a project by name. Support optional --area flag to assign task to an area by name. Use Things 3 AppleScript API to create the task with all specified properties. Validate date format and provide helpful error for invalid dates. Validate that specified project/area exists before creating task. Provide success confirmation with created task name.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:27:02.645Z",
+    "updated": "2025-12-08T20:27:02.645Z"
+  },
+  {
+    "id": 8,
+    "title": "Implement 'complete' command for marking tasks done",
+    "description": "Create the complete command that marks tasks as completed in Things 3. Accept task name as required positional argument to identify the task. Use Things 3 AppleScript API to mark the task as complete. Handle case where task name is not unique (prompt user or show options). Handle case where task doesn't exist with clear error message. Handle case where task is already completed gracefully. Provide success confirmation with task name that was completed.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:27:17.328Z",
+    "updated": "2025-12-08T20:27:17.328Z"
+  },
+  {
+    "id": 9,
+    "title": "Implement 'edit' command for updating tasks",
+    "description": "Create the edit command that modifies existing tasks in Things 3. Accept task name as required positional argument to identify the task to edit. Support optional --name flag to rename the task. Support optional --notes flag to update task notes. Support optional --due flag to change due date (accept date string in YYYY-MM-DD format). Support optional --tags flag to replace tags with comma-separated list. Support optional --project flag to move task to different project by name. Support optional --area flag to move task to different area by name. Use Things 3 AppleScript API to find task by name and update specified properties. Handle case where task name is not unique (prompt user or show options). Validate date format for --due flag. Validate that target project/area exists. Provide success confirmation showing what was changed.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:27:30.029Z",
+    "updated": "2025-12-08T20:27:30.029Z"
+  },
+  {
+    "id": 10,
+    "title": "Implement 'cancel' command for canceling tasks",
+    "description": "Create the cancel command that marks tasks as canceled in Things 3. Accept task name as required positional argument to identify the task. Use Things 3 AppleScript API to cancel the task (move to trash or set status as canceled depending on Things 3 capabilities). Handle case where task name is not unique (prompt user or show options). Handle case where task doesn't exist with clear error message. Handle case where task is already canceled or completed gracefully. Provide success confirmation with task name that was canceled.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:27:41.184Z",
+    "updated": "2025-12-08T20:27:41.184Z"
+  },
+  {
+    "id": 11,
+    "title": "Implement 'add-project' command for creating projects",
+    "description": "Create the add-project command that creates new projects in Things 3. Accept project name as required positional argument. Use Things 3 AppleScript API to create the project. Handle case where project already exists (error or success message depending on Things 3 behavior). Consider supporting optional parameters like --area to create project within specific area, --notes for project notes, and --deadline for project deadline if Things 3 supports these on creation. Provide success confirmation with created project name. Validate that project name is not empty or invalid.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:27:53.906Z",
+    "updated": "2025-12-08T20:27:53.906Z"
+  },
+  {
+    "id": 12,
+    "title": "Implement 'add-area' command for creating areas",
+    "description": "Create the add-area command that creates new areas in Things 3. Accept area name as required positional argument. Use Things 3 AppleScript API to create the area. Handle case where area already exists (error or success message depending on Things 3 behavior). Validate that area name is not empty or invalid. Provide success confirmation with created area name.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:28:05.100Z",
+    "updated": "2025-12-08T20:28:05.100Z"
+  },
+  {
+    "id": 13,
+    "title": "Add --json flag for machine-readable output",
+    "description": "Implement global --json flag that outputs structured JSON instead of formatted tables. Apply to list command to output array of task objects with all properties (id, name, notes, dueDate, tags, project, area, status, creationDate, modificationDate). Apply to add, edit, complete, cancel commands to output success/error as JSON object with status, message, and affected task data. Apply to add-project and add-area commands to output created entity as JSON. Use consistent JSON schema across all commands with success/error structure. Ensure JSON is valid and properly escaped. When --json is used, suppress all colored/formatted output and output only valid JSON to stdout. Send error messages to stderr even in JSON mode. Document JSON output schema for each command in help text.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-08T20:28:19.944Z",
+    "updated": "2025-12-08T20:28:19.944Z"
+  }
+]
