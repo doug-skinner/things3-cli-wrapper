@@ -30,10 +30,10 @@
     "id": 4,
     "title": "Set up AppleScript integration using run-applescript package",
     "description": "Install and configure the run-applescript npm package as the bridge between Node.js and Things 3 AppleScript API. Create utility module for executing AppleScript commands and handling responses. Implement error handling for AppleScript execution failures (Things 3 not running, permission issues, script errors). Create TypeScript type definitions for AppleScript responses from Things 3. Implement async/await wrapper around run-applescript for cleaner command implementation. Add appropriate error messages when Things 3 is not installed or not accessible. Document AppleScript integration approach in code comments referencing Things 3 AppleScript Dictionary.",
-    "status": "Not Started",
-    "notes": "",
+    "status": "In Progress",
+    "notes": "Starting work on AppleScript integration using run-applescript package",
     "created": "2025-12-08T20:26:20.434Z",
-    "updated": "2025-12-08T20:26:20.434Z"
+    "updated": "2025-12-08T20:46:54.039Z"
   },
   {
     "id": 5,
