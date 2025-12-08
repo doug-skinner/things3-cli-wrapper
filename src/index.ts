@@ -6,6 +6,8 @@
  */
 
 import { Command } from 'commander';
+import { listTasks } from './things';
+import { displayTasksTable, displayTasksJson, displayError } from './formatter';
 
 const program = new Command();
 
@@ -24,9 +26,24 @@ program
   .option('--area <name>', 'Filter by area name')
   .option('--tag <name>', 'Filter by tag name')
   .option('--json', 'Output as JSON instead of formatted table')
-  .action((options) => {
-    console.log('List command called with options:', options);
-    // Implementation will be added in later requirements
+  .action(async (options) => {
+    try {
+      const tasks = await listTasks({
+        list: options.list,
+        project: options.project,
+        area: options.area,
+        tag: options.tag,
+      });
+
+      if (options.json) {
+        displayTasksJson(tasks);
+      } else {
+        displayTasksTable(tasks);
+      }
+    } catch (error) {
+      displayError(error instanceof Error ? error.message : String(error));
+      process.exit(1);
+    }
   });
 
 // Add command - create new task
