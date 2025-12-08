@@ -48,10 +48,10 @@
     "id": 6,
     "title": "Implement 'list' command for displaying tasks",
     "description": "Create the list command that displays all tasks from Things 3. Support basic listing without filters to show all tasks. Implement --list flag to filter by built-in Things 3 lists (Today, Upcoming, Anytime, Someday). Implement --project flag to filter tasks by project name. Implement --area flag to filter tasks by area name. Implement --tag flag to filter tasks by tag name. Use Things 3 AppleScript API via run-applescript to retrieve task data. Format output using colored table view. Handle cases where Things 3 is not running or not installed with appropriate error messages.",
-    "status": "Not Started",
-    "notes": "",
+    "status": "In Progress",
+    "notes": "Starting work on list command implementation with Things 3 AppleScript integration",
     "created": "2025-12-08T20:26:48.880Z",
-    "updated": "2025-12-08T20:26:48.880Z"
+    "updated": "2025-12-08T20:55:51.312Z"
   },
   {
     "id": 7,
