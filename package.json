@@ -1,0 +1,19 @@
+{
+  "name": "@doug-skiner/thangs",
+  "version": "0.1.0",
+  "description": "A CLI wrapper around Things 3, built in TypeScript",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "watch": "tsc --watch",
+    "dev": "npm run watch"
+  },
+  "keywords": [],
+  "author": "Doug Skinner",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.5"
+  }
+}
