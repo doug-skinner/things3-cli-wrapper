@@ -115,5 +115,41 @@
     "notes": "Completed implementation: The --json flag was implemented incrementally across all commands (list, add, edit, complete, cancel, add-project, add-area) as each command was developed. All commands support --json output with consistent schema: {success: boolean, data/error: ...}. JSON output is valid, properly escaped, and sent to stdout. Errors in JSON mode are sent with success:false structure. All commands tested with --json flag successfully.",
     "created": "2025-12-08T20:28:19.944Z",
     "updated": "2025-12-09T13:33:58.224Z"
+  },
+  {
+    "id": 14,
+    "title": "Create Claude Skill for Things3 CLI Wrapper",
+    "description": "Create a comprehensive Claude Skill that teaches Claude Code how to effectively use the Things3 CLI wrapper. The skill follows Anthropic's comprehensive skill pattern with progressive disclosure.\n\nDeliverables:\n- Create skill/ directory in repository root\n- Create skill/SKILL.md (400-500 lines): YAML frontmatter with name 'things3-cli-wrapper', description, allowed-tools: [Bash]. Include overview of Things3, core concepts (hierarchy, lists, task lifecycle), decision trees for command selection, common workflows (basic to advanced), important notes on edge cases, and progressive disclosure using 'See reference.md'\n- Create skill/reference.md: Complete documentation for all 7 commands (list, add, edit, complete, cancel, add-project, add-area), every flag and option with descriptions, parameter validation rules, output formats (table vs JSON), error cases and messages, AppleScript behavior notes\n- Create skill/examples.md: 10-15 real-world usage scenarios, daily task management workflows, project planning workflows, advanced filtering and scripting, error handling examples, copy-pasteable commands with expected outputs\n- Create skill/LICENSE.txt (copy MIT license from root)\n- Create skill/README.md (comprehensive developer documentation)\n\nImplementation: Use actual CLI patterns from src/index.ts, reference real option names and flags from Commander.js definitions, include JSON output format examples from src/formatter.ts, document error messages from src/things.ts, respect Things3 terminology (Areas, Projects, Tags, Lists).\n\nAcceptance Criteria: SKILL.md is under 500 lines with progressive disclosure pattern, all 7 CLI commands documented with decision guidance, error handling patterns clearly explained, examples cover basic to advanced workflows, skill can be manually copied to ~/.claude/skills/ and loaded by Claude Code.",
+    "status": "In Progress",
+    "notes": "Starting work on creating comprehensive Claude Skill content with SKILL.md, reference.md, examples.md, LICENSE.txt, and README.md",
+    "created": "2025-12-09T13:56:17.862Z",
+    "updated": "2025-12-09T13:59:04.272Z"
+  },
+  {
+    "id": 15,
+    "title": "Add CLI Install Command for Claude Skill",
+    "description": "Create a new CLI command that installs the Things3 Claude Skill to the user's Claude Code skills directory, making it easy for users to enable the skill with a single command.\n\nCommand: thangs install-skill [--force] [--json]\n\nDeliverables:\n- Add new 'install-skill' command to src/index.ts using Commander.js\n- Implement installSkill() function in src/things.ts: Resolve paths (skill source to ~/.claude/skills/things3-cli-wrapper/), validate skill directory exists with SKILL.md present, check if ~/.claude/ directory exists (error if not, suggesting Claude Code installation), create ~/.claude/skills/ if it doesn't exist, handle existing installation (error without --force, overwrite with --force), copy directory recursively using Node.js fs.promises, return success message with installation path\n- Add helper functions: getSkillSourcePath() returns path to skill/ in package (handles global vs local install), getSkillDestinationPath() returns ~/.claude/skills/things3-cli-wrapper/, validateSkillDirectory() checks SKILL.md exists\n- Update package.json: Add 'skill/' to 'files' array for npm packaging\n- Support --json flag with consistent output format\n\nImplementation: Use Node.js fs.promises, path, and os modules. Handle global vs local installation via __dirname detection. Implement comprehensive error handling for: skill/ directory not found, ~/.claude doesn't exist, installation directory exists without --force, permission errors, missing SKILL.md.\n\nJSON Output Format: Success {success: true, message: 'Skill installed successfully', installPath: path, files: array}. Error {success: false, error: message, installPath: path}.\n\nAcceptance Criteria: Command thangs install-skill copies skill directory successfully, creates ~/.claude/skills/ if it doesn't exist, requires --force to overwrite existing installation, provides clear actionable error messages for all failure cases, supports --json output format, works when installed globally via npm, works during development with npm link, skill/ directory included in npm package (verify with npm pack).",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-09T13:56:34.445Z",
+    "updated": "2025-12-09T13:56:34.445Z"
+  },
+  {
+    "id": 16,
+    "title": "Update Main README with Claude Code Integration",
+    "description": "Update the main repository README to explain the Claude Skill feature, installation process, and usage examples for end users.\n\nDeliverables:\n- Add new section to README.md: 'Claude Code Integration' (after Usage section). Explain what a Claude Skill is and its value, installation instructions using 'thangs install-skill', update instructions using 'thangs install-skill --force', verification steps (check ~/.claude/skills/things3-cli-wrapper/), usage examples showing natural language requests to Claude, what the skill teaches Claude (commands, concepts, workflows), reference to skill/README.md for developers\n- Update table of contents if present\n- Ensure examples match the skill's teaching style and terminology\n\nSection Content should include: Overview of Claude Skills, installation commands, verification steps, natural language usage examples, list of what Claude learns from the skill.\n\nAcceptance Criteria: README clearly explains skill feature and benefits to end users, installation instructions are accurate and testable, usage examples are realistic and match skill capabilities, users understand how to verify skill installation, documentation follows existing README style and tone, section is appropriately placed in README flow.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-09T13:56:45.731Z",
+    "updated": "2025-12-09T13:56:45.731Z"
+  },
+  {
+    "id": 17,
+    "title": "Create Skill Developer Documentation",
+    "description": "Create comprehensive developer documentation in skill/README.md explaining the skill structure, testing workflow, and contribution guidelines for developers who want to modify or improve the skill.\n\nDeliverables:\n- Create skill/README.md with sections: Overview (what the skill does, target audience), Skill Structure (explanation of each file's purpose and design), For End Users (installation and verification steps), For Developers (testing workflow: modify → install → test with Claude → iterate, skill design principles: progressive disclosure, decision trees, workflow-oriented, updating skill content when adding new CLI commands, architecture explanation of how Claude uses the skill), Contributing (guidelines for improving the skill), License (reference to MIT license)\n\nDeveloper Testing Workflow: 1. Make changes to skill files in this directory, 2. Run: thangs install-skill --force, 3. Test with Claude Code by asking task management questions, 4. Observe Claude's responses and command choices, 5. Iterate on skill content based on behavior\n\nAcceptance Criteria: Developers understand skill structure and design principles, testing workflow is clear and actionable, contribution guidelines explain how to improve skill content, architecture section explains integration with CLI, documentation assumes audience may add new CLI commands, links to Anthropic skill guidelines for reference.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-09T13:56:56.904Z",
+    "updated": "2025-12-09T13:56:56.904Z"
   }
 ]
