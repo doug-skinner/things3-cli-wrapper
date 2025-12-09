@@ -57,10 +57,10 @@
     "id": 7,
     "title": "Implement 'add' command for creating tasks",
     "description": "Create the add command that creates new tasks in Things 3 Inbox. Accept task name as required positional argument. Support optional --notes flag for task notes. Support optional --due flag for due date (accept date string in YYYY-MM-DD format). Support optional --tags flag accepting comma-separated list of tags. Support optional --project flag to assign task to a project by name. Support optional --area flag to assign task to an area by name. Use Things 3 AppleScript API to create the task with all specified properties. Validate date format and provide helpful error for invalid dates. Validate that specified project/area exists before creating task. Provide success confirmation with created task name.",
-    "status": "In Progress",
-    "notes": "Starting work on add command for creating tasks in Things 3",
+    "status": "Completed",
+    "notes": "Completed implementation: Created comprehensive add command with addTask() function supporting all options (notes, due date with validation, tags, project, area). Implemented AppleScript for task creation, escaping special characters, date format validation (YYYY-MM-DD), project/area existence validation. Supports both success message and JSON output. Tested: basic tasks, full options, date validation, error handling. Works perfectly.",
     "created": "2025-12-08T20:27:02.645Z",
-    "updated": "2025-12-08T21:02:28.346Z"
+    "updated": "2025-12-09T13:08:10.988Z"
   },
   {
     "id": 8,
