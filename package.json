@@ -1,6 +1,6 @@
 {
 	"name": "@dougskinner/thangs",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "A CLI wrapper around Things 3, built in TypeScript",
 	"main": "dist/index.js",
 	"bin": {
@@ -14,7 +14,14 @@
 		"lint": "biome check .",
 		"format": "biome format --write ."
 	},
-	"keywords": ["things3", "cli", "task-manager", "todo", "typescript", "macos"],
+	"keywords": [
+		"things3",
+		"cli",
+		"task-manager",
+		"todo",
+		"typescript",
+		"macos"
+	],
 	"author": "Doug Skinner",
 	"license": "MIT",
 	"repository": {
@@ -27,7 +34,12 @@
 	"engines": {
 		"node": ">=16.0.0"
 	},
-	"files": ["dist/", "skill/", "README.md", "LICENSE"],
+	"files": [
+		"dist/",
+		"skill/",
+		"README.md",
+		"LICENSE"
+	],
 	"dependencies": {
 		"commander": "^11.1.0",
 		"run-applescript": "^7.0.0",
