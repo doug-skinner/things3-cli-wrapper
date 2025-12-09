@@ -405,7 +405,7 @@ export async function completeTask(taskName: string): Promise<string> {
       set taskCount to count of matchingTasks
 
       if taskCount is 0 then
-        error "Task not found: ${escapeAppleScript(taskName)}"
+        return "NOT_FOUND:" & "${escapeAppleScript(taskName)}"
       else if taskCount > 1 then
         -- Multiple tasks found - return their details
         set output to "MULTIPLE:"
@@ -450,6 +450,12 @@ export async function completeTask(taskName: string): Promise<string> {
 
   const result = await executeAppleScript(script);
   const trimmedResult = result.trim();
+
+  // Handle task not found
+  if (trimmedResult.startsWith('NOT_FOUND:')) {
+    const taskName = trimmedResult.substring('NOT_FOUND:'.length);
+    throw new Error(`Task not found: ${taskName}`);
+  }
 
   // Handle multiple tasks found
   if (trimmedResult.startsWith('MULTIPLE:')) {
