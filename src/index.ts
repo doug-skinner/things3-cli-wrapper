@@ -6,7 +6,7 @@
  */
 
 import { Command } from 'commander';
-import { listTasks, addTask, completeTask, editTask, cancelTask, addProject, addArea } from './things';
+import { listTasks, addTask, completeTask, editTask, cancelTask, addProject, addArea, installSkill } from './things';
 import { displayTasksTable, displayTasksJson, displayError, displaySuccess } from './formatter';
 
 const program = new Command();
@@ -214,6 +214,48 @@ program
     } catch (error) {
       if (options.json) {
         console.log(JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) }, null, 2));
+      } else {
+        displayError(error instanceof Error ? error.message : String(error));
+      }
+      process.exit(1);
+    }
+  });
+
+// Install-skill command - install Claude Skill
+program
+  .command('install-skill')
+  .description('Install the Things3 Claude Skill to ~/.claude/skills/')
+  .option('--force', 'Overwrite existing installation')
+  .option('--json', 'Output as JSON')
+  .action(async (options) => {
+    try {
+      const result = await installSkill({ force: options.force });
+
+      if (options.json) {
+        console.log(JSON.stringify(result, null, 2));
+      } else {
+        if (result.success) {
+          displaySuccess(result.message || 'Skill installed successfully');
+          console.log(`Installation path: ${result.installPath}`);
+          if (result.files && result.files.length > 0) {
+            console.log(`\nInstalled files (${result.files.length}):`);
+            for (const file of result.files) {
+              console.log(`  - ${file}`);
+            }
+          }
+        } else {
+          displayError(result.error || 'Installation failed');
+        }
+      }
+
+      // Exit with appropriate code
+      process.exit(result.success ? 0 : 1);
+    } catch (error) {
+      if (options.json) {
+        console.log(JSON.stringify({
+          success: false,
+          error: error instanceof Error ? error.message : String(error)
+        }, null, 2));
       } else {
         displayError(error instanceof Error ? error.message : String(error));
       }
