@@ -1,164 +1,164 @@
 [
-  {
-    "id": 1,
-    "title": "Set up TypeScript build system and development environment",
-    "description": "Configure TypeScript compilation for the project. Create tsconfig.json with appropriate compiler options (target ES2020 or later, module commonjs for Node.js, strict type checking enabled, declaration files for types). Set up npm scripts for build (compile TypeScript to JavaScript), clean (remove build artifacts), and watch mode (continuous compilation during development). Configure output directory (dist/). Set up source maps for debugging. Ensure compiled code is compatible with Node.js CLI execution. Configure npm package.json main entry point to compiled JavaScript. Add build artifacts to .gitignore.",
-    "status": "Completed",
-    "notes": "Completed implementation: Set up complete TypeScript build system with tsconfig.json (ES2020, commonjs, strict checking), npm scripts (build/clean/watch), source maps, declaration files, .gitignore, and verified working compilation to dist/ directory. Entry point has Node.js shebang and runs successfully.",
-    "created": "2025-12-08T20:25:36.479Z",
-    "updated": "2025-12-08T20:37:38.811Z"
-  },
-  {
-    "id": 2,
-    "title": "Configure package.json with scoped package name and metadata",
-    "description": "Create package.json with name '@dougskinner/thangs'. Set version to 0.1.0 for initial release. Add description: 'A CLI wrapper around Things 3, built in TypeScript'. Set author and license (MIT suggested). Configure bin entry: 'thangs' pointing to compiled CLI entry point. Add dependencies: commander, run-applescript, chalk, cli-table3. Add devDependencies: typescript, @types/node, biome. Define npm scripts: build, clean, dev (watch mode), lint, format. Set engines to specify minimum Node.js version (16+ recommended). Add keywords for npm discoverability: things3, cli, task-manager, todo, typescript, macos. Set repository and bugs URLs. Configure files array to include only necessary files in published package (dist/, README.md, LICENSE). Set main entry to compiled JavaScript file.",
-    "status": "Completed",
-    "notes": "Completed implementation: Configured package.json with scoped name @dougskinner/thangs, bin entry for CLI, all required dependencies (commander, run-applescript, chalk, cli-table3), devDependencies (biome), npm scripts for lint/format, MIT license, keywords, repository URLs, Node.js >=16 requirement, and files array for package publishing.",
-    "created": "2025-12-08T20:25:53.352Z",
-    "updated": "2025-12-08T20:40:07.349Z"
-  },
-  {
-    "id": 3,
-    "title": "Integrate Commander.js for CLI command structure",
-    "description": "Set up Commander.js as the CLI framework for the thangs tool. Install Commander.js dependency. Create main CLI entry point that configures Commander program with tool name, version, and description. Define command structure for all commands (list, add, edit, complete, cancel, add-project, add-area). Configure command arguments and options using Commander's API (positional args, flags, option parsing). Set up help text generation for each command. Configure version flag. Set up proper error handling for unknown commands and invalid arguments. Ensure CLI is executable via 'thangs' global command after npm install. Add shebang for Node.js execution.",
-    "status": "Completed",
-    "notes": "Completed implementation: Integrated Commander.js with complete CLI structure. Configured all 7 commands (list, add, edit, complete, cancel, add-project, add-area) with positional arguments, option flags, help text, version support, and error handling. CLI is executable via 'thangs' command. Verified all commands parse correctly.",
-    "created": "2025-12-08T20:26:07.214Z",
-    "updated": "2025-12-08T20:46:22.743Z"
-  },
-  {
-    "id": 4,
-    "title": "Set up AppleScript integration using run-applescript package",
-    "description": "Install and configure the run-applescript npm package as the bridge between Node.js and Things 3 AppleScript API. Create utility module for executing AppleScript commands and handling responses. Implement error handling for AppleScript execution failures (Things 3 not running, permission issues, script errors). Create TypeScript type definitions for AppleScript responses from Things 3. Implement async/await wrapper around run-applescript for cleaner command implementation. Add appropriate error messages when Things 3 is not installed or not accessible. Document AppleScript integration approach in code comments referencing Things 3 AppleScript Dictionary.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created comprehensive AppleScript integration module (applescript.ts) with executeAppleScript async wrapper, custom error classes (AppleScriptError, Things3NotAccessibleError), TypeScript type definitions (Things3Task, Things3Project, Things3Area), accessibility checking functions (isThings3Accessible, verifyThings3Access), proper error handling for all failure cases, and detailed JSDoc documentation referencing Things 3 AppleScript Dictionary. Tested and verified working.",
-    "created": "2025-12-08T20:26:20.434Z",
-    "updated": "2025-12-08T20:52:07.757Z"
-  },
-  {
-    "id": 5,
-    "title": "Implement colored table output for list command",
-    "description": "Create formatted table view for displaying tasks using cli-table3 library. Implement colorization for output using chalk library. Color-code different elements: task names (white/default), projects (blue), areas (green), tags (yellow), due dates (red for overdue, yellow for soon, white for future). Display tasks in tabular format with columns for: task name, project, area, tags, due date, status. Auto-size columns based on terminal width. Add proper padding and borders for readability. Ensure colors work with both light and dark terminal themes. Make color output respect NO_COLOR environment variable and --no-color flag for accessibility.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created comprehensive formatter module with displayTasksTable() using cli-table3, color-coded output with chalk (task names white, projects blue, areas green, tags yellow, smart due date colors), displayTasksJson() for JSON format, error/success message helpers, NO_COLOR env var support, --no-color flag support, auto-sizing columns, word wrap, proper borders and padding. Tested with/without colors - works perfectly.",
-    "created": "2025-12-08T20:26:34.639Z",
-    "updated": "2025-12-08T20:55:29.382Z"
-  },
-  {
-    "id": 6,
-    "title": "Implement 'list' command for displaying tasks",
-    "description": "Create the list command that displays all tasks from Things 3. Support basic listing without filters to show all tasks. Implement --list flag to filter by built-in Things 3 lists (Today, Upcoming, Anytime, Someday). Implement --project flag to filter tasks by project name. Implement --area flag to filter tasks by area name. Implement --tag flag to filter tasks by tag name. Use Things 3 AppleScript API via run-applescript to retrieve task data. Format output using colored table view. Handle cases where Things 3 is not running or not installed with appropriate error messages.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created comprehensive list command with full Things 3 AppleScript integration. Implemented listTasks() with custom AppleScript formatter, parser for task data, support for --list filter (Today/Upcoming/Anytime/Someday), --project/--area/--tag filters with case-insensitive matching, both table and JSON output, proper error handling for Things 3 not running. Tested with real Things 3 data - works perfectly.",
-    "created": "2025-12-08T20:26:48.880Z",
-    "updated": "2025-12-08T21:02:04.126Z"
-  },
-  {
-    "id": 7,
-    "title": "Implement 'add' command for creating tasks",
-    "description": "Create the add command that creates new tasks in Things 3 Inbox. Accept task name as required positional argument. Support optional --notes flag for task notes. Support optional --due flag for due date (accept date string in YYYY-MM-DD format). Support optional --tags flag accepting comma-separated list of tags. Support optional --project flag to assign task to a project by name. Support optional --area flag to assign task to an area by name. Use Things 3 AppleScript API to create the task with all specified properties. Validate date format and provide helpful error for invalid dates. Validate that specified project/area exists before creating task. Provide success confirmation with created task name.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created comprehensive add command with addTask() function supporting all options (notes, due date with validation, tags, project, area). Implemented AppleScript for task creation, escaping special characters, date format validation (YYYY-MM-DD), project/area existence validation. Supports both success message and JSON output. Tested: basic tasks, full options, date validation, error handling. Works perfectly.",
-    "created": "2025-12-08T20:27:02.645Z",
-    "updated": "2025-12-09T13:08:10.988Z"
-  },
-  {
-    "id": 8,
-    "title": "Implement 'complete' command for marking tasks done",
-    "description": "Create the complete command that marks tasks as completed in Things 3. Accept task name as required positional argument to identify the task. Use Things 3 AppleScript API to mark the task as complete. Handle case where task name is not unique (prompt user or show options). Handle case where task doesn't exist with clear error message. Handle case where task is already completed gracefully. Provide success confirmation with task name that was completed.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created completeTask() function with full AppleScript integration. Handles all required cases: task completion, task not found error, multiple tasks with same name (shows list with details), already completed tasks (graceful error). Supports both formatted and JSON output. Tested all scenarios successfully.",
-    "created": "2025-12-08T20:27:17.328Z",
-    "updated": "2025-12-09T13:23:32.713Z"
-  },
-  {
-    "id": 9,
-    "title": "Implement 'edit' command for updating tasks",
-    "description": "Create the edit command that modifies existing tasks in Things 3. Accept task name as required positional argument to identify the task to edit. Support optional --name flag to rename the task. Support optional --notes flag to update task notes. Support optional --due flag to change due date (accept date string in YYYY-MM-DD format). Support optional --tags flag to replace tags with comma-separated list. Support optional --project flag to move task to different project by name. Support optional --area flag to move task to different area by name. Use Things 3 AppleScript API to find task by name and update specified properties. Handle case where task name is not unique (prompt user or show options). Validate date format for --due flag. Validate that target project/area exists. Provide success confirmation showing what was changed.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created editTask() function with full AppleScript integration. Supports updating name, notes, due date, tags (including clearing), project, and area. Handles all error cases: task not found, multiple tasks, invalid date format, project/area not found, no changes specified. Validates all inputs. Supports both formatted and JSON output. Tested all scenarios successfully including edge cases like clearing tags.",
-    "created": "2025-12-08T20:27:30.029Z",
-    "updated": "2025-12-09T13:27:43.429Z"
-  },
-  {
-    "id": 10,
-    "title": "Implement 'cancel' command for canceling tasks",
-    "description": "Create the cancel command that marks tasks as canceled in Things 3. Accept task name as required positional argument to identify the task. Use Things 3 AppleScript API to cancel the task (move to trash or set status as canceled depending on Things 3 capabilities). Handle case where task name is not unique (prompt user or show options). Handle case where task doesn't exist with clear error message. Handle case where task is already canceled or completed gracefully. Provide success confirmation with task name that was canceled.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created cancelTask() function with full AppleScript integration. Handles all required cases: task cancellation, task not found error, multiple tasks with same name (shows list with details), already canceled tasks, already completed tasks (cannot cancel). Supports both formatted and JSON output. Tested all scenarios successfully.",
-    "created": "2025-12-08T20:27:41.184Z",
-    "updated": "2025-12-09T13:29:45.113Z"
-  },
-  {
-    "id": 11,
-    "title": "Implement 'add-project' command for creating projects",
-    "description": "Create the add-project command that creates new projects in Things 3. Accept project name as required positional argument. Use Things 3 AppleScript API to create the project. Handle case where project already exists (error or success message depending on Things 3 behavior). Consider supporting optional parameters like --area to create project within specific area, --notes for project notes, and --deadline for project deadline if Things 3 supports these on creation. Provide success confirmation with created project name. Validate that project name is not empty or invalid.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created addProject() function with full AppleScript integration. Supports creating projects with optional area, notes, and deadline. Validates project name and deadline format. Handles area not found error gracefully. Supports both formatted and JSON output. Tested all scenarios successfully.",
-    "created": "2025-12-08T20:27:53.906Z",
-    "updated": "2025-12-09T13:32:06.886Z"
-  },
-  {
-    "id": 12,
-    "title": "Implement 'add-area' command for creating areas",
-    "description": "Create the add-area command that creates new areas in Things 3. Accept area name as required positional argument. Use Things 3 AppleScript API to create the area. Handle case where area already exists (error or success message depending on Things 3 behavior). Validate that area name is not empty or invalid. Provide success confirmation with created area name.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created addArea() function with full AppleScript integration. Validates area name is not empty. Supports both formatted and JSON output. Tested all scenarios successfully.",
-    "created": "2025-12-08T20:28:05.100Z",
-    "updated": "2025-12-09T13:33:34.931Z"
-  },
-  {
-    "id": 13,
-    "title": "Add --json flag for machine-readable output",
-    "description": "Implement global --json flag that outputs structured JSON instead of formatted tables. Apply to list command to output array of task objects with all properties (id, name, notes, dueDate, tags, project, area, status, creationDate, modificationDate). Apply to add, edit, complete, cancel commands to output success/error as JSON object with status, message, and affected task data. Apply to add-project and add-area commands to output created entity as JSON. Use consistent JSON schema across all commands with success/error structure. Ensure JSON is valid and properly escaped. When --json is used, suppress all colored/formatted output and output only valid JSON to stdout. Send error messages to stderr even in JSON mode. Document JSON output schema for each command in help text.",
-    "status": "Completed",
-    "notes": "Completed implementation: The --json flag was implemented incrementally across all commands (list, add, edit, complete, cancel, add-project, add-area) as each command was developed. All commands support --json output with consistent schema: {success: boolean, data/error: ...}. JSON output is valid, properly escaped, and sent to stdout. Errors in JSON mode are sent with success:false structure. All commands tested with --json flag successfully.",
-    "created": "2025-12-08T20:28:19.944Z",
-    "updated": "2025-12-09T13:33:58.224Z"
-  },
-  {
-    "id": 14,
-    "title": "Create Claude Skill for Things3 CLI Wrapper",
-    "description": "Create a comprehensive Claude Skill that teaches Claude Code how to effectively use the Things3 CLI wrapper. The skill follows Anthropic's comprehensive skill pattern with progressive disclosure.\n\nDeliverables:\n- Create skill/ directory in repository root\n- Create skill/SKILL.md (400-500 lines): YAML frontmatter with name 'things3-cli-wrapper', description, allowed-tools: [Bash]. Include overview of Things3, core concepts (hierarchy, lists, task lifecycle), decision trees for command selection, common workflows (basic to advanced), important notes on edge cases, and progressive disclosure using 'See reference.md'\n- Create skill/reference.md: Complete documentation for all 7 commands (list, add, edit, complete, cancel, add-project, add-area), every flag and option with descriptions, parameter validation rules, output formats (table vs JSON), error cases and messages, AppleScript behavior notes\n- Create skill/examples.md: 10-15 real-world usage scenarios, daily task management workflows, project planning workflows, advanced filtering and scripting, error handling examples, copy-pasteable commands with expected outputs\n- Create skill/LICENSE.txt (copy MIT license from root)\n- Create skill/README.md (comprehensive developer documentation)\n\nImplementation: Use actual CLI patterns from src/index.ts, reference real option names and flags from Commander.js definitions, include JSON output format examples from src/formatter.ts, document error messages from src/things.ts, respect Things3 terminology (Areas, Projects, Tags, Lists).\n\nAcceptance Criteria: SKILL.md is under 500 lines with progressive disclosure pattern, all 7 CLI commands documented with decision guidance, error handling patterns clearly explained, examples cover basic to advanced workflows, skill can be manually copied to ~/.claude/skills/ and loaded by Claude Code.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created comprehensive Claude Skill with SKILL.md (429 lines with progressive disclosure), reference.md (complete documentation for all 7 commands), examples.md (24 real-world scenarios), LICENSE.txt (MIT), and initial README.md. All files follow Anthropic skill guidelines. SKILL.md uses progressive disclosure pattern, documents all 7 commands with decision trees, covers basic to advanced workflows, and includes error handling patterns. Ready for manual testing.",
-    "created": "2025-12-09T13:56:17.862Z",
-    "updated": "2025-12-09T14:34:15.916Z"
-  },
-  {
-    "id": 15,
-    "title": "Add CLI Install Command for Claude Skill",
-    "description": "Create a new CLI command that installs the Things3 Claude Skill to the user's Claude Code skills directory, making it easy for users to enable the skill with a single command.\n\nCommand: thangs install-skill [--force] [--json]\n\nDeliverables:\n- Add new 'install-skill' command to src/index.ts using Commander.js\n- Implement installSkill() function in src/things.ts: Resolve paths (skill source to ~/.claude/skills/things3-cli-wrapper/), validate skill directory exists with SKILL.md present, check if ~/.claude/ directory exists (error if not, suggesting Claude Code installation), create ~/.claude/skills/ if it doesn't exist, handle existing installation (error without --force, overwrite with --force), copy directory recursively using Node.js fs.promises, return success message with installation path\n- Add helper functions: getSkillSourcePath() returns path to skill/ in package (handles global vs local install), getSkillDestinationPath() returns ~/.claude/skills/things3-cli-wrapper/, validateSkillDirectory() checks SKILL.md exists\n- Update package.json: Add 'skill/' to 'files' array for npm packaging\n- Support --json flag with consistent output format\n\nImplementation: Use Node.js fs.promises, path, and os modules. Handle global vs local installation via __dirname detection. Implement comprehensive error handling for: skill/ directory not found, ~/.claude doesn't exist, installation directory exists without --force, permission errors, missing SKILL.md.\n\nJSON Output Format: Success {success: true, message: 'Skill installed successfully', installPath: path, files: array}. Error {success: false, error: message, installPath: path}.\n\nAcceptance Criteria: Command thangs install-skill copies skill directory successfully, creates ~/.claude/skills/ if it doesn't exist, requires --force to overwrite existing installation, provides clear actionable error messages for all failure cases, supports --json output format, works when installed globally via npm, works during development with npm link, skill/ directory included in npm package (verify with npm pack).",
-    "status": "Completed",
-    "notes": "Completed implementation: Created install-skill CLI command with full implementation. Added helper functions (getSkillSourcePath, getSkillDestinationPath, validateSkillDirectory, installSkill, copyDirectory, getFilesRecursively) to src/things.ts. Updated src/index.ts with new install-skill command supporting --force and --json flags. Implementation includes: comprehensive error handling for all failure cases (skill directory not found, ~/.claude doesn't exist, installation already exists, permission errors), recursive directory copying, file listing in output, consistent JSON output format. Successfully tested: basic installation, --force overwrite, --json output, error cases, help text. Command works with npm link during development. Package.json already updated with skill/ in files array for npm publishing.",
-    "created": "2025-12-09T13:56:34.445Z",
-    "updated": "2025-12-09T14:44:49.563Z"
-  },
-  {
-    "id": 16,
-    "title": "Update Main README with Claude Code Integration",
-    "description": "Update the main repository README to explain the Claude Skill feature, installation process, and usage examples for end users.\n\nDeliverables:\n- Add new section to README.md: 'Claude Code Integration' (after Usage section). Explain what a Claude Skill is and its value, installation instructions using 'thangs install-skill', update instructions using 'thangs install-skill --force', verification steps (check ~/.claude/skills/things3-cli-wrapper/), usage examples showing natural language requests to Claude, what the skill teaches Claude (commands, concepts, workflows), reference to skill/README.md for developers\n- Update table of contents if present\n- Ensure examples match the skill's teaching style and terminology\n\nSection Content should include: Overview of Claude Skills, installation commands, verification steps, natural language usage examples, list of what Claude learns from the skill.\n\nAcceptance Criteria: README clearly explains skill feature and benefits to end users, installation instructions are accurate and testable, usage examples are realistic and match skill capabilities, users understand how to verify skill installation, documentation follows existing README style and tone, section is appropriately placed in README flow.",
-    "status": "Completed",
-    "notes": "Completed implementation: Added comprehensive Claude Code Integration section to main README.md. Section includes: overview of Claude Skills and their value, installation instructions (thangs install-skill), update instructions (thangs install-skill --force), verification steps (listing ~/.claude/skills/things3-cli-wrapper/), natural language usage examples showing Claude integration, detailed list of what Claude learns from the skill (8 commands, filtering, properties, workflows, error handling), reference to skill/README.md for developers. Section is appropriately placed after Usage section, follows existing README style and tone, and provides clear actionable instructions for end users.",
-    "created": "2025-12-09T13:56:45.731Z",
-    "updated": "2025-12-09T14:45:56.165Z"
-  },
-  {
-    "id": 17,
-    "title": "Create Skill Developer Documentation",
-    "description": "Create comprehensive developer documentation in skill/README.md explaining the skill structure, testing workflow, and contribution guidelines for developers who want to modify or improve the skill.\n\nDeliverables:\n- Create skill/README.md with sections: Overview (what the skill does, target audience), Skill Structure (explanation of each file's purpose and design), For End Users (installation and verification steps), For Developers (testing workflow: modify → install → test with Claude → iterate, skill design principles: progressive disclosure, decision trees, workflow-oriented, updating skill content when adding new CLI commands, architecture explanation of how Claude uses the skill), Contributing (guidelines for improving the skill), License (reference to MIT license)\n\nDeveloper Testing Workflow: 1. Make changes to skill files in this directory, 2. Run: thangs install-skill --force, 3. Test with Claude Code by asking task management questions, 4. Observe Claude's responses and command choices, 5. Iterate on skill content based on behavior\n\nAcceptance Criteria: Developers understand skill structure and design principles, testing workflow is clear and actionable, contribution guidelines explain how to improve skill content, architecture section explains integration with CLI, documentation assumes audience may add new CLI commands, links to Anthropic skill guidelines for reference.",
-    "status": "Completed",
-    "notes": "Completed implementation: Created comprehensive developer documentation in skill/README.md. Documentation includes: complete developer testing workflow (modify → install → test → iterate), detailed skill design principles with explanations (progressive disclosure, decision trees, workflow-oriented, CLI integration), architecture explanation showing how Claude uses the skill with example flow diagram, guidance for updating skill content when adding new CLI commands, contribution guidelines with good contribution examples and pull request guidelines, additional resources section with links to Anthropic, Things 3, Commander.js, and repository. All markdown linting issues fixed (blank lines around headings/lists/fences, proper URL formatting).",
-    "created": "2025-12-09T13:56:56.904Z",
-    "updated": "2025-12-09T14:49:46.642Z"
-  },
-  {
-    "id": 18,
-    "title": "Add GitHub Action for NPM Publishing",
-    "description": "Create a GitHub Actions workflow that automatically publishes the package to NPM when a new version tag is pushed. Use the publish.yml workflow from coding-agent-progress-manager as a reference.\n\nDeliverables:\n- Create .github/workflows/ directory structure\n- Create .github/workflows/publish.yml workflow file\n- Configure workflow to trigger on version tags (v*)\n- Set up Node.js environment (use Node 18+)\n- Install dependencies with npm ci\n- Run TypeScript build (npm run build)\n- Publish to NPM with --access public flag\n- Use NODE_AUTH_TOKEN secret for authentication\n- Set proper permissions (contents: read, id-token: write)\n\nImplementation Notes:\n- Workflow should run on ubuntu-latest\n- Use actions/checkout@v4 for code checkout\n- Use actions/setup-node@v4 with registry-url set to https://registry.npmjs.org\n- Package is scoped (@dougskinner/thangs) so requires --access public\n- No validation step needed (unlike cap-manager which has validate-progress.js)\n- Build step compiles TypeScript to dist/ directory\n- NPM_TOKEN secret must be configured in GitHub repository settings\n\nTesting:\n- Workflow will be tested when first version tag (e.g., v0.1.0) is pushed\n- Can be tested locally by running: npm ci && npm run build && npm pack\n- Verify package contents with: tar -tzf dougskinner-thangs-*.tgz\n\nAcceptance Criteria:\n- .github/workflows/publish.yml created with correct structure\n- Workflow triggers on version tags (v*)\n- All steps are properly configured\n- Workflow uses NPM_TOKEN secret for authentication\n- Package publishes successfully to NPM when tag is pushed",
-    "status": "Completed",
-    "notes": "Completed implementation: Created GitHub Actions workflow for NPM publishing in .github/workflows/publish.yml. Workflow is configured to: trigger on version tags (v*), run on ubuntu-latest with proper permissions (contents: read, id-token: write), use actions/checkout@v4 and actions/setup-node@v4, install dependencies with npm ci, run TypeScript build (npm run build), publish to NPM with --access public flag, use NODE_AUTH_TOKEN secret for authentication. Workflow structure matches the reference from coding-agent-progress-manager. Verified locally: npm ci installs correctly, npm run build compiles successfully, npm pack shows all required files included (dist/, skill/, README.md, package.json). Package is ready for NPM publishing when version tag is pushed.",
-    "created": "2025-12-09T14:54:58.620Z",
-    "updated": "2025-12-09T15:00:08.073Z"
-  }
+	{
+		"id": 1,
+		"title": "Set up TypeScript build system and development environment",
+		"description": "Configure TypeScript compilation for the project. Create tsconfig.json with appropriate compiler options (target ES2020 or later, module commonjs for Node.js, strict type checking enabled, declaration files for types). Set up npm scripts for build (compile TypeScript to JavaScript), clean (remove build artifacts), and watch mode (continuous compilation during development). Configure output directory (dist/). Set up source maps for debugging. Ensure compiled code is compatible with Node.js CLI execution. Configure npm package.json main entry point to compiled JavaScript. Add build artifacts to .gitignore.",
+		"status": "Completed",
+		"notes": "Completed implementation: Set up complete TypeScript build system with tsconfig.json (ES2020, commonjs, strict checking), npm scripts (build/clean/watch), source maps, declaration files, .gitignore, and verified working compilation to dist/ directory. Entry point has Node.js shebang and runs successfully.",
+		"created": "2025-12-08T20:25:36.479Z",
+		"updated": "2025-12-08T20:37:38.811Z"
+	},
+	{
+		"id": 2,
+		"title": "Configure package.json with scoped package name and metadata",
+		"description": "Create package.json with name '@dougskinner/thangs'. Set version to 0.1.0 for initial release. Add description: 'A CLI wrapper around Things 3, built in TypeScript'. Set author and license (MIT suggested). Configure bin entry: 'thangs' pointing to compiled CLI entry point. Add dependencies: commander, run-applescript, chalk, cli-table3. Add devDependencies: typescript, @types/node, biome. Define npm scripts: build, clean, dev (watch mode), lint, format. Set engines to specify minimum Node.js version (16+ recommended). Add keywords for npm discoverability: things3, cli, task-manager, todo, typescript, macos. Set repository and bugs URLs. Configure files array to include only necessary files in published package (dist/, README.md, LICENSE). Set main entry to compiled JavaScript file.",
+		"status": "Completed",
+		"notes": "Completed implementation: Configured package.json with scoped name @dougskinner/thangs, bin entry for CLI, all required dependencies (commander, run-applescript, chalk, cli-table3), devDependencies (biome), npm scripts for lint/format, MIT license, keywords, repository URLs, Node.js >=16 requirement, and files array for package publishing.",
+		"created": "2025-12-08T20:25:53.352Z",
+		"updated": "2025-12-08T20:40:07.349Z"
+	},
+	{
+		"id": 3,
+		"title": "Integrate Commander.js for CLI command structure",
+		"description": "Set up Commander.js as the CLI framework for the thangs tool. Install Commander.js dependency. Create main CLI entry point that configures Commander program with tool name, version, and description. Define command structure for all commands (list, add, edit, complete, cancel, add-project, add-area). Configure command arguments and options using Commander's API (positional args, flags, option parsing). Set up help text generation for each command. Configure version flag. Set up proper error handling for unknown commands and invalid arguments. Ensure CLI is executable via 'thangs' global command after npm install. Add shebang for Node.js execution.",
+		"status": "Completed",
+		"notes": "Completed implementation: Integrated Commander.js with complete CLI structure. Configured all 7 commands (list, add, edit, complete, cancel, add-project, add-area) with positional arguments, option flags, help text, version support, and error handling. CLI is executable via 'thangs' command. Verified all commands parse correctly.",
+		"created": "2025-12-08T20:26:07.214Z",
+		"updated": "2025-12-08T20:46:22.743Z"
+	},
+	{
+		"id": 4,
+		"title": "Set up AppleScript integration using run-applescript package",
+		"description": "Install and configure the run-applescript npm package as the bridge between Node.js and Things 3 AppleScript API. Create utility module for executing AppleScript commands and handling responses. Implement error handling for AppleScript execution failures (Things 3 not running, permission issues, script errors). Create TypeScript type definitions for AppleScript responses from Things 3. Implement async/await wrapper around run-applescript for cleaner command implementation. Add appropriate error messages when Things 3 is not installed or not accessible. Document AppleScript integration approach in code comments referencing Things 3 AppleScript Dictionary.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created comprehensive AppleScript integration module (applescript.ts) with executeAppleScript async wrapper, custom error classes (AppleScriptError, Things3NotAccessibleError), TypeScript type definitions (Things3Task, Things3Project, Things3Area), accessibility checking functions (isThings3Accessible, verifyThings3Access), proper error handling for all failure cases, and detailed JSDoc documentation referencing Things 3 AppleScript Dictionary. Tested and verified working.",
+		"created": "2025-12-08T20:26:20.434Z",
+		"updated": "2025-12-08T20:52:07.757Z"
+	},
+	{
+		"id": 5,
+		"title": "Implement colored table output for list command",
+		"description": "Create formatted table view for displaying tasks using cli-table3 library. Implement colorization for output using chalk library. Color-code different elements: task names (white/default), projects (blue), areas (green), tags (yellow), due dates (red for overdue, yellow for soon, white for future). Display tasks in tabular format with columns for: task name, project, area, tags, due date, status. Auto-size columns based on terminal width. Add proper padding and borders for readability. Ensure colors work with both light and dark terminal themes. Make color output respect NO_COLOR environment variable and --no-color flag for accessibility.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created comprehensive formatter module with displayTasksTable() using cli-table3, color-coded output with chalk (task names white, projects blue, areas green, tags yellow, smart due date colors), displayTasksJson() for JSON format, error/success message helpers, NO_COLOR env var support, --no-color flag support, auto-sizing columns, word wrap, proper borders and padding. Tested with/without colors - works perfectly.",
+		"created": "2025-12-08T20:26:34.639Z",
+		"updated": "2025-12-08T20:55:29.382Z"
+	},
+	{
+		"id": 6,
+		"title": "Implement 'list' command for displaying tasks",
+		"description": "Create the list command that displays all tasks from Things 3. Support basic listing without filters to show all tasks. Implement --list flag to filter by built-in Things 3 lists (Today, Upcoming, Anytime, Someday). Implement --project flag to filter tasks by project name. Implement --area flag to filter tasks by area name. Implement --tag flag to filter tasks by tag name. Use Things 3 AppleScript API via run-applescript to retrieve task data. Format output using colored table view. Handle cases where Things 3 is not running or not installed with appropriate error messages.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created comprehensive list command with full Things 3 AppleScript integration. Implemented listTasks() with custom AppleScript formatter, parser for task data, support for --list filter (Today/Upcoming/Anytime/Someday), --project/--area/--tag filters with case-insensitive matching, both table and JSON output, proper error handling for Things 3 not running. Tested with real Things 3 data - works perfectly.",
+		"created": "2025-12-08T20:26:48.880Z",
+		"updated": "2025-12-08T21:02:04.126Z"
+	},
+	{
+		"id": 7,
+		"title": "Implement 'add' command for creating tasks",
+		"description": "Create the add command that creates new tasks in Things 3 Inbox. Accept task name as required positional argument. Support optional --notes flag for task notes. Support optional --due flag for due date (accept date string in YYYY-MM-DD format). Support optional --tags flag accepting comma-separated list of tags. Support optional --project flag to assign task to a project by name. Support optional --area flag to assign task to an area by name. Use Things 3 AppleScript API to create the task with all specified properties. Validate date format and provide helpful error for invalid dates. Validate that specified project/area exists before creating task. Provide success confirmation with created task name.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created comprehensive add command with addTask() function supporting all options (notes, due date with validation, tags, project, area). Implemented AppleScript for task creation, escaping special characters, date format validation (YYYY-MM-DD), project/area existence validation. Supports both success message and JSON output. Tested: basic tasks, full options, date validation, error handling. Works perfectly.",
+		"created": "2025-12-08T20:27:02.645Z",
+		"updated": "2025-12-09T13:08:10.988Z"
+	},
+	{
+		"id": 8,
+		"title": "Implement 'complete' command for marking tasks done",
+		"description": "Create the complete command that marks tasks as completed in Things 3. Accept task name as required positional argument to identify the task. Use Things 3 AppleScript API to mark the task as complete. Handle case where task name is not unique (prompt user or show options). Handle case where task doesn't exist with clear error message. Handle case where task is already completed gracefully. Provide success confirmation with task name that was completed.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created completeTask() function with full AppleScript integration. Handles all required cases: task completion, task not found error, multiple tasks with same name (shows list with details), already completed tasks (graceful error). Supports both formatted and JSON output. Tested all scenarios successfully.",
+		"created": "2025-12-08T20:27:17.328Z",
+		"updated": "2025-12-09T13:23:32.713Z"
+	},
+	{
+		"id": 9,
+		"title": "Implement 'edit' command for updating tasks",
+		"description": "Create the edit command that modifies existing tasks in Things 3. Accept task name as required positional argument to identify the task to edit. Support optional --name flag to rename the task. Support optional --notes flag to update task notes. Support optional --due flag to change due date (accept date string in YYYY-MM-DD format). Support optional --tags flag to replace tags with comma-separated list. Support optional --project flag to move task to different project by name. Support optional --area flag to move task to different area by name. Use Things 3 AppleScript API to find task by name and update specified properties. Handle case where task name is not unique (prompt user or show options). Validate date format for --due flag. Validate that target project/area exists. Provide success confirmation showing what was changed.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created editTask() function with full AppleScript integration. Supports updating name, notes, due date, tags (including clearing), project, and area. Handles all error cases: task not found, multiple tasks, invalid date format, project/area not found, no changes specified. Validates all inputs. Supports both formatted and JSON output. Tested all scenarios successfully including edge cases like clearing tags.",
+		"created": "2025-12-08T20:27:30.029Z",
+		"updated": "2025-12-09T13:27:43.429Z"
+	},
+	{
+		"id": 10,
+		"title": "Implement 'cancel' command for canceling tasks",
+		"description": "Create the cancel command that marks tasks as canceled in Things 3. Accept task name as required positional argument to identify the task. Use Things 3 AppleScript API to cancel the task (move to trash or set status as canceled depending on Things 3 capabilities). Handle case where task name is not unique (prompt user or show options). Handle case where task doesn't exist with clear error message. Handle case where task is already canceled or completed gracefully. Provide success confirmation with task name that was canceled.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created cancelTask() function with full AppleScript integration. Handles all required cases: task cancellation, task not found error, multiple tasks with same name (shows list with details), already canceled tasks, already completed tasks (cannot cancel). Supports both formatted and JSON output. Tested all scenarios successfully.",
+		"created": "2025-12-08T20:27:41.184Z",
+		"updated": "2025-12-09T13:29:45.113Z"
+	},
+	{
+		"id": 11,
+		"title": "Implement 'add-project' command for creating projects",
+		"description": "Create the add-project command that creates new projects in Things 3. Accept project name as required positional argument. Use Things 3 AppleScript API to create the project. Handle case where project already exists (error or success message depending on Things 3 behavior). Consider supporting optional parameters like --area to create project within specific area, --notes for project notes, and --deadline for project deadline if Things 3 supports these on creation. Provide success confirmation with created project name. Validate that project name is not empty or invalid.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created addProject() function with full AppleScript integration. Supports creating projects with optional area, notes, and deadline. Validates project name and deadline format. Handles area not found error gracefully. Supports both formatted and JSON output. Tested all scenarios successfully.",
+		"created": "2025-12-08T20:27:53.906Z",
+		"updated": "2025-12-09T13:32:06.886Z"
+	},
+	{
+		"id": 12,
+		"title": "Implement 'add-area' command for creating areas",
+		"description": "Create the add-area command that creates new areas in Things 3. Accept area name as required positional argument. Use Things 3 AppleScript API to create the area. Handle case where area already exists (error or success message depending on Things 3 behavior). Validate that area name is not empty or invalid. Provide success confirmation with created area name.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created addArea() function with full AppleScript integration. Validates area name is not empty. Supports both formatted and JSON output. Tested all scenarios successfully.",
+		"created": "2025-12-08T20:28:05.100Z",
+		"updated": "2025-12-09T13:33:34.931Z"
+	},
+	{
+		"id": 13,
+		"title": "Add --json flag for machine-readable output",
+		"description": "Implement global --json flag that outputs structured JSON instead of formatted tables. Apply to list command to output array of task objects with all properties (id, name, notes, dueDate, tags, project, area, status, creationDate, modificationDate). Apply to add, edit, complete, cancel commands to output success/error as JSON object with status, message, and affected task data. Apply to add-project and add-area commands to output created entity as JSON. Use consistent JSON schema across all commands with success/error structure. Ensure JSON is valid and properly escaped. When --json is used, suppress all colored/formatted output and output only valid JSON to stdout. Send error messages to stderr even in JSON mode. Document JSON output schema for each command in help text.",
+		"status": "Completed",
+		"notes": "Completed implementation: The --json flag was implemented incrementally across all commands (list, add, edit, complete, cancel, add-project, add-area) as each command was developed. All commands support --json output with consistent schema: {success: boolean, data/error: ...}. JSON output is valid, properly escaped, and sent to stdout. Errors in JSON mode are sent with success:false structure. All commands tested with --json flag successfully.",
+		"created": "2025-12-08T20:28:19.944Z",
+		"updated": "2025-12-09T13:33:58.224Z"
+	},
+	{
+		"id": 14,
+		"title": "Create Claude Skill for Things3 CLI Wrapper",
+		"description": "Create a comprehensive Claude Skill that teaches Claude Code how to effectively use the Things3 CLI wrapper. The skill follows Anthropic's comprehensive skill pattern with progressive disclosure.\n\nDeliverables:\n- Create skill/ directory in repository root\n- Create skill/SKILL.md (400-500 lines): YAML frontmatter with name 'things3-cli-wrapper', description, allowed-tools: [Bash]. Include overview of Things3, core concepts (hierarchy, lists, task lifecycle), decision trees for command selection, common workflows (basic to advanced), important notes on edge cases, and progressive disclosure using 'See reference.md'\n- Create skill/reference.md: Complete documentation for all 7 commands (list, add, edit, complete, cancel, add-project, add-area), every flag and option with descriptions, parameter validation rules, output formats (table vs JSON), error cases and messages, AppleScript behavior notes\n- Create skill/examples.md: 10-15 real-world usage scenarios, daily task management workflows, project planning workflows, advanced filtering and scripting, error handling examples, copy-pasteable commands with expected outputs\n- Create skill/LICENSE.txt (copy MIT license from root)\n- Create skill/README.md (comprehensive developer documentation)\n\nImplementation: Use actual CLI patterns from src/index.ts, reference real option names and flags from Commander.js definitions, include JSON output format examples from src/formatter.ts, document error messages from src/things.ts, respect Things3 terminology (Areas, Projects, Tags, Lists).\n\nAcceptance Criteria: SKILL.md is under 500 lines with progressive disclosure pattern, all 7 CLI commands documented with decision guidance, error handling patterns clearly explained, examples cover basic to advanced workflows, skill can be manually copied to ~/.claude/skills/ and loaded by Claude Code.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created comprehensive Claude Skill with SKILL.md (429 lines with progressive disclosure), reference.md (complete documentation for all 7 commands), examples.md (24 real-world scenarios), LICENSE.txt (MIT), and initial README.md. All files follow Anthropic skill guidelines. SKILL.md uses progressive disclosure pattern, documents all 7 commands with decision trees, covers basic to advanced workflows, and includes error handling patterns. Ready for manual testing.",
+		"created": "2025-12-09T13:56:17.862Z",
+		"updated": "2025-12-09T14:34:15.916Z"
+	},
+	{
+		"id": 15,
+		"title": "Add CLI Install Command for Claude Skill",
+		"description": "Create a new CLI command that installs the Things3 Claude Skill to the user's Claude Code skills directory, making it easy for users to enable the skill with a single command.\n\nCommand: thangs install-skill [--force] [--json]\n\nDeliverables:\n- Add new 'install-skill' command to src/index.ts using Commander.js\n- Implement installSkill() function in src/things.ts: Resolve paths (skill source to ~/.claude/skills/things3-cli-wrapper/), validate skill directory exists with SKILL.md present, check if ~/.claude/ directory exists (error if not, suggesting Claude Code installation), create ~/.claude/skills/ if it doesn't exist, handle existing installation (error without --force, overwrite with --force), copy directory recursively using Node.js fs.promises, return success message with installation path\n- Add helper functions: getSkillSourcePath() returns path to skill/ in package (handles global vs local install), getSkillDestinationPath() returns ~/.claude/skills/things3-cli-wrapper/, validateSkillDirectory() checks SKILL.md exists\n- Update package.json: Add 'skill/' to 'files' array for npm packaging\n- Support --json flag with consistent output format\n\nImplementation: Use Node.js fs.promises, path, and os modules. Handle global vs local installation via __dirname detection. Implement comprehensive error handling for: skill/ directory not found, ~/.claude doesn't exist, installation directory exists without --force, permission errors, missing SKILL.md.\n\nJSON Output Format: Success {success: true, message: 'Skill installed successfully', installPath: path, files: array}. Error {success: false, error: message, installPath: path}.\n\nAcceptance Criteria: Command thangs install-skill copies skill directory successfully, creates ~/.claude/skills/ if it doesn't exist, requires --force to overwrite existing installation, provides clear actionable error messages for all failure cases, supports --json output format, works when installed globally via npm, works during development with npm link, skill/ directory included in npm package (verify with npm pack).",
+		"status": "Completed",
+		"notes": "Completed implementation: Created install-skill CLI command with full implementation. Added helper functions (getSkillSourcePath, getSkillDestinationPath, validateSkillDirectory, installSkill, copyDirectory, getFilesRecursively) to src/things.ts. Updated src/index.ts with new install-skill command supporting --force and --json flags. Implementation includes: comprehensive error handling for all failure cases (skill directory not found, ~/.claude doesn't exist, installation already exists, permission errors), recursive directory copying, file listing in output, consistent JSON output format. Successfully tested: basic installation, --force overwrite, --json output, error cases, help text. Command works with npm link during development. Package.json already updated with skill/ in files array for npm publishing.",
+		"created": "2025-12-09T13:56:34.445Z",
+		"updated": "2025-12-09T14:44:49.563Z"
+	},
+	{
+		"id": 16,
+		"title": "Update Main README with Claude Code Integration",
+		"description": "Update the main repository README to explain the Claude Skill feature, installation process, and usage examples for end users.\n\nDeliverables:\n- Add new section to README.md: 'Claude Code Integration' (after Usage section). Explain what a Claude Skill is and its value, installation instructions using 'thangs install-skill', update instructions using 'thangs install-skill --force', verification steps (check ~/.claude/skills/things3-cli-wrapper/), usage examples showing natural language requests to Claude, what the skill teaches Claude (commands, concepts, workflows), reference to skill/README.md for developers\n- Update table of contents if present\n- Ensure examples match the skill's teaching style and terminology\n\nSection Content should include: Overview of Claude Skills, installation commands, verification steps, natural language usage examples, list of what Claude learns from the skill.\n\nAcceptance Criteria: README clearly explains skill feature and benefits to end users, installation instructions are accurate and testable, usage examples are realistic and match skill capabilities, users understand how to verify skill installation, documentation follows existing README style and tone, section is appropriately placed in README flow.",
+		"status": "Completed",
+		"notes": "Completed implementation: Added comprehensive Claude Code Integration section to main README.md. Section includes: overview of Claude Skills and their value, installation instructions (thangs install-skill), update instructions (thangs install-skill --force), verification steps (listing ~/.claude/skills/things3-cli-wrapper/), natural language usage examples showing Claude integration, detailed list of what Claude learns from the skill (8 commands, filtering, properties, workflows, error handling), reference to skill/README.md for developers. Section is appropriately placed after Usage section, follows existing README style and tone, and provides clear actionable instructions for end users.",
+		"created": "2025-12-09T13:56:45.731Z",
+		"updated": "2025-12-09T14:45:56.165Z"
+	},
+	{
+		"id": 17,
+		"title": "Create Skill Developer Documentation",
+		"description": "Create comprehensive developer documentation in skill/README.md explaining the skill structure, testing workflow, and contribution guidelines for developers who want to modify or improve the skill.\n\nDeliverables:\n- Create skill/README.md with sections: Overview (what the skill does, target audience), Skill Structure (explanation of each file's purpose and design), For End Users (installation and verification steps), For Developers (testing workflow: modify → install → test with Claude → iterate, skill design principles: progressive disclosure, decision trees, workflow-oriented, updating skill content when adding new CLI commands, architecture explanation of how Claude uses the skill), Contributing (guidelines for improving the skill), License (reference to MIT license)\n\nDeveloper Testing Workflow: 1. Make changes to skill files in this directory, 2. Run: thangs install-skill --force, 3. Test with Claude Code by asking task management questions, 4. Observe Claude's responses and command choices, 5. Iterate on skill content based on behavior\n\nAcceptance Criteria: Developers understand skill structure and design principles, testing workflow is clear and actionable, contribution guidelines explain how to improve skill content, architecture section explains integration with CLI, documentation assumes audience may add new CLI commands, links to Anthropic skill guidelines for reference.",
+		"status": "Completed",
+		"notes": "Completed implementation: Created comprehensive developer documentation in skill/README.md. Documentation includes: complete developer testing workflow (modify → install → test → iterate), detailed skill design principles with explanations (progressive disclosure, decision trees, workflow-oriented, CLI integration), architecture explanation showing how Claude uses the skill with example flow diagram, guidance for updating skill content when adding new CLI commands, contribution guidelines with good contribution examples and pull request guidelines, additional resources section with links to Anthropic, Things 3, Commander.js, and repository. All markdown linting issues fixed (blank lines around headings/lists/fences, proper URL formatting).",
+		"created": "2025-12-09T13:56:56.904Z",
+		"updated": "2025-12-09T14:49:46.642Z"
+	},
+	{
+		"id": 18,
+		"title": "Add GitHub Action for NPM Publishing",
+		"description": "Create a GitHub Actions workflow that automatically publishes the package to NPM when a new version tag is pushed. Use the publish.yml workflow from coding-agent-progress-manager as a reference.\n\nDeliverables:\n- Create .github/workflows/ directory structure\n- Create .github/workflows/publish.yml workflow file\n- Configure workflow to trigger on version tags (v*)\n- Set up Node.js environment (use Node 18+)\n- Install dependencies with npm ci\n- Run TypeScript build (npm run build)\n- Publish to NPM with --access public flag\n- Use NODE_AUTH_TOKEN secret for authentication\n- Set proper permissions (contents: read, id-token: write)\n\nImplementation Notes:\n- Workflow should run on ubuntu-latest\n- Use actions/checkout@v4 for code checkout\n- Use actions/setup-node@v4 with registry-url set to https://registry.npmjs.org\n- Package is scoped (@dougskinner/thangs) so requires --access public\n- No validation step needed (unlike cap-manager which has validate-progress.js)\n- Build step compiles TypeScript to dist/ directory\n- NPM_TOKEN secret must be configured in GitHub repository settings\n\nTesting:\n- Workflow will be tested when first version tag (e.g., v0.1.0) is pushed\n- Can be tested locally by running: npm ci && npm run build && npm pack\n- Verify package contents with: tar -tzf dougskinner-thangs-*.tgz\n\nAcceptance Criteria:\n- .github/workflows/publish.yml created with correct structure\n- Workflow triggers on version tags (v*)\n- All steps are properly configured\n- Workflow uses NPM_TOKEN secret for authentication\n- Package publishes successfully to NPM when tag is pushed",
+		"status": "Completed",
+		"notes": "Completed implementation: Created GitHub Actions workflow for NPM publishing in .github/workflows/publish.yml. Workflow is configured to: trigger on version tags (v*), run on ubuntu-latest with proper permissions (contents: read, id-token: write), use actions/checkout@v4 and actions/setup-node@v4, install dependencies with npm ci, run TypeScript build (npm run build), publish to NPM with --access public flag, use NODE_AUTH_TOKEN secret for authentication. Workflow structure matches the reference from coding-agent-progress-manager. Verified locally: npm ci installs correctly, npm run build compiles successfully, npm pack shows all required files included (dist/, skill/, README.md, package.json). Package is ready for NPM publishing when version tag is pushed.",
+		"created": "2025-12-09T14:54:58.620Z",
+		"updated": "2025-12-09T15:00:08.073Z"
+	}
 ]
