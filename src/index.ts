@@ -6,7 +6,7 @@
  */
 
 import { Command } from 'commander';
-import { listTasks, addTask, completeTask, editTask } from './things';
+import { listTasks, addTask, completeTask, editTask, cancelTask } from './things';
 import { displayTasksTable, displayTasksJson, displayError, displaySuccess } from './formatter';
 
 const program = new Command();
@@ -147,9 +147,23 @@ program
   .command('cancel <task>')
   .description('Cancel a task in Things 3 (move to trash)')
   .option('--json', 'Output as JSON')
-  .action((task, options) => {
-    console.log('Cancel command called for:', task, 'with options:', options);
-    // Implementation will be added in later requirements
+  .action(async (task, options) => {
+    try {
+      const canceledTaskName = await cancelTask(task);
+
+      if (options.json) {
+        console.log(JSON.stringify({ success: true, task: canceledTaskName }, null, 2));
+      } else {
+        displaySuccess(`Task canceled: ${canceledTaskName}`);
+      }
+    } catch (error) {
+      if (options.json) {
+        console.log(JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) }, null, 2));
+      } else {
+        displayError(error instanceof Error ? error.message : String(error));
+      }
+      process.exit(1);
+    }
   });
 
 // Add-project command - create new project
