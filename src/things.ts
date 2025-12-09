@@ -6,6 +6,9 @@
  */
 
 import { executeAppleScript, verifyThings3Access, type Things3Task } from './applescript';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
+import * as os from 'node:os';
 
 /**
  * Options for listing tasks
