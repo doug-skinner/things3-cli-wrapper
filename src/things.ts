@@ -255,3 +255,131 @@ function filterTasks(tasks: Things3Task[], options: ListOptions): Things3Task[] 
 
   return filtered;
 }
+
+/**
+ * Options for adding a task
+ */
+export interface AddTaskOptions {
+  notes?: string;
+  due?: string;        // YYYY-MM-DD format
+  tags?: string;       // Comma-separated
+  project?: string;
+  area?: string;
+}
+
+/**
+ * Add a new task to Things 3
+ *
+ * @param name - Task name (required)
+ * @param options - Task options
+ * @returns The created task name
+ */
+export async function addTask(name: string, options: AddTaskOptions = {}): Promise<string> {
+  // Verify Things 3 is accessible
+  await verifyThings3Access();
+
+  // Validate date format if provided
+  if (options.due) {
+    if (!isValidDateFormat(options.due)) {
+      throw new Error(`Invalid date format: ${options.due}. Expected YYYY-MM-DD format (e.g., 2025-12-31)`);
+    }
+  }
+
+  // Build AppleScript to create task
+  let script = `
+    tell application "Things3"
+      -- Create new to-do
+      set newTodo to make new to do with properties {name:"${escapeAppleScript(name)}"}
+  `;
+
+  // Add notes if provided
+  if (options.notes) {
+    script += `
+      set notes of newTodo to "${escapeAppleScript(options.notes)}"
+    `;
+  }
+
+  // Add due date if provided
+  if (options.due) {
+    script += `
+      set due date of newTodo to date "${options.due}"
+    `;
+  }
+
+  // Add to project if specified
+  if (options.project) {
+    script += `
+      -- Find project by name
+      try
+        set targetProject to first project whose name is "${escapeAppleScript(options.project)}"
+        move newTodo to targetProject
+      on error
+        error "Project not found: ${escapeAppleScript(options.project)}"
+      end try
+    `;
+  }
+
+  // Add to area if specified
+  if (options.area) {
+    script += `
+      -- Find area by name
+      try
+        set targetArea to first area whose name is "${escapeAppleScript(options.area)}"
+        set area of newTodo to targetArea
+      on error
+        error "Area not found: ${escapeAppleScript(options.area)}"
+      end try
+    `;
+  }
+
+  // Add tags if specified
+  if (options.tags) {
+    const tagList = options.tags.split(',').map(t => t.trim());
+    for (const tag of tagList) {
+      script += `
+        -- Create or get tag and add to task
+        try
+          set targetTag to first tag whose name is "${escapeAppleScript(tag)}"
+        on error
+          set targetTag to make new tag with properties {name:"${escapeAppleScript(tag)}"}
+        end try
+        tell newTodo
+          set tag names to (tag names & "${escapeAppleScript(tag)}")
+        end tell
+      `;
+    }
+  }
+
+  script += `
+      return name of newTodo
+    end tell
+  `;
+
+  const result = await executeAppleScript(script);
+  return result.trim();
+}
+
+/**
+ * Escape special characters for AppleScript strings
+ */
+function escapeAppleScript(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r');
+}
+
+/**
+ * Validate date format YYYY-MM-DD
+ */
+function isValidDateFormat(dateStr: string): boolean {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(dateStr)) {
+    return false;
+  }
+
+  // Check if it's a valid date
+  const date = new Date(dateStr);
+  return !Number.isNaN(date.getTime());
+}

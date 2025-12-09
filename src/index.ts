@@ -6,8 +6,8 @@
  */
 
 import { Command } from 'commander';
-import { listTasks } from './things';
-import { displayTasksTable, displayTasksJson, displayError } from './formatter';
+import { listTasks, addTask } from './things';
+import { displayTasksTable, displayTasksJson, displayError, displaySuccess } from './formatter';
 
 const program = new Command();
 
@@ -56,9 +56,29 @@ program
   .option('--project <name>', 'Assign to project by name')
   .option('--area <name>', 'Assign to area by name')
   .option('--json', 'Output as JSON')
-  .action((name, options) => {
-    console.log('Add command called for:', name, 'with options:', options);
-    // Implementation will be added in later requirements
+  .action(async (name, options) => {
+    try {
+      const createdTaskName = await addTask(name, {
+        notes: options.notes,
+        due: options.due,
+        tags: options.tags,
+        project: options.project,
+        area: options.area,
+      });
+
+      if (options.json) {
+        console.log(JSON.stringify({ success: true, task: createdTaskName }, null, 2));
+      } else {
+        displaySuccess(`Task created: ${createdTaskName}`);
+      }
+    } catch (error) {
+      if (options.json) {
+        console.log(JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) }, null, 2));
+      } else {
+        displayError(error instanceof Error ? error.message : String(error));
+      }
+      process.exit(1);
+    }
   });
 
 // Edit command - update existing task
