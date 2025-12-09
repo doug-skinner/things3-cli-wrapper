@@ -111,9 +111,9 @@
     "id": 13,
     "title": "Add --json flag for machine-readable output",
     "description": "Implement global --json flag that outputs structured JSON instead of formatted tables. Apply to list command to output array of task objects with all properties (id, name, notes, dueDate, tags, project, area, status, creationDate, modificationDate). Apply to add, edit, complete, cancel commands to output success/error as JSON object with status, message, and affected task data. Apply to add-project and add-area commands to output created entity as JSON. Use consistent JSON schema across all commands with success/error structure. Ensure JSON is valid and properly escaped. When --json is used, suppress all colored/formatted output and output only valid JSON to stdout. Send error messages to stderr even in JSON mode. Document JSON output schema for each command in help text.",
-    "status": "Not Started",
-    "notes": "",
+    "status": "Completed",
+    "notes": "Completed implementation: The --json flag was implemented incrementally across all commands (list, add, edit, complete, cancel, add-project, add-area) as each command was developed. All commands support --json output with consistent schema: {success: boolean, data/error: ...}. JSON output is valid, properly escaped, and sent to stdout. Errors in JSON mode are sent with success:false structure. All commands tested with --json flag successfully.",
     "created": "2025-12-08T20:28:19.944Z",
-    "updated": "2025-12-08T20:28:19.944Z"
+    "updated": "2025-12-09T13:33:58.224Z"
   }
 ]
