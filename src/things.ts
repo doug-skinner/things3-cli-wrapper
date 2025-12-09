@@ -653,27 +653,37 @@ export async function editTask(taskName: string, options: EditTaskOptions = {}):
   if (options.tags !== undefined) {
     const tagList = options.tags.split(',').map(t => t.trim()).filter(t => t !== '');
 
-    // Clear existing tags first
-    updateScript += `
-      set tag names of theTask to {}
-    `;
+    // Ensure all tags exist first
+    for (const tag of tagList) {
+      updateScript += `
+        try
+          set targetTag to first tag whose name is "${escapeAppleScript(tag)}"
+        on error
+          set targetTag to make new tag with properties {name:"${escapeAppleScript(tag)}"}
+        end try
+      `;
+    }
 
-    // Add new tags
+    // Build the new tag list
     if (tagList.length > 0) {
-      for (const tag of tagList) {
-        updateScript += `
-          try
-            set targetTag to first tag whose name is "${escapeAppleScript(tag)}"
-          on error
-            set targetTag to make new tag with properties {name:"${escapeAppleScript(tag)}"}
-          end try
-          tell theTask
-            set tag names to (tag names & "${escapeAppleScript(tag)}")
-          end tell
-        `;
+      let tagListScript = '';
+      for (let i = 0; i < tagList.length; i++) {
+        if (i === 0) {
+          tagListScript = `"${escapeAppleScript(tagList[i])}"`;
+        } else {
+          tagListScript += ` & "${escapeAppleScript(tagList[i])}"`;
+        }
       }
+
+      updateScript += `
+        set tag names of theTask to ${tagListScript}
+      `;
       changes.push(`tags set to: ${options.tags}`);
     } else {
+      // Empty tags - clear them
+      updateScript += `
+        set tag names of theTask to ""
+      `;
       changes.push('tags cleared');
     }
   }
