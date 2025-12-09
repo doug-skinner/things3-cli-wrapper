@@ -66,10 +66,10 @@
     "id": 8,
     "title": "Implement 'complete' command for marking tasks done",
     "description": "Create the complete command that marks tasks as completed in Things 3. Accept task name as required positional argument to identify the task. Use Things 3 AppleScript API to mark the task as complete. Handle case where task name is not unique (prompt user or show options). Handle case where task doesn't exist with clear error message. Handle case where task is already completed gracefully. Provide success confirmation with task name that was completed.",
-    "status": "In Progress",
-    "notes": "Starting work on complete command for marking tasks done",
+    "status": "Completed",
+    "notes": "Completed implementation: Created completeTask() function with full AppleScript integration. Handles all required cases: task completion, task not found error, multiple tasks with same name (shows list with details), already completed tasks (graceful error). Supports both formatted and JSON output. Tested all scenarios successfully.",
     "created": "2025-12-08T20:27:17.328Z",
-    "updated": "2025-12-09T13:16:05.585Z"
+    "updated": "2025-12-09T13:23:32.713Z"
   },
   {
     "id": 9,
