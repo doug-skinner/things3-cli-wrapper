@@ -530,7 +530,15 @@ export async function editTask(taskName: string, options: EditTaskOptions = {}):
   await verifyThings3Access();
 
   // Validate that at least one option is provided
-  if (!options.name && !options.notes && !options.due && !options.tags && !options.project && !options.area) {
+  const hasChanges =
+    options.name !== undefined ||
+    options.notes !== undefined ||
+    options.due !== undefined ||
+    options.tags !== undefined ||
+    options.project !== undefined ||
+    options.area !== undefined;
+
+  if (!hasChanges) {
     throw new Error('No changes specified. Please provide at least one option to update (--name, --notes, --due, --tags, --project, or --area)');
   }
 
