@@ -965,3 +965,31 @@ export async function addProject(name: string, options: AddProjectOptions = {}):
     throw error;
   }
 }
+
+/**
+ * Add a new area to Things 3
+ *
+ * @param name - Area name (required)
+ * @returns The created area name
+ */
+export async function addArea(name: string): Promise<string> {
+  // Verify Things 3 is accessible
+  await verifyThings3Access();
+
+  // Validate area name
+  if (!name || name.trim() === '') {
+    throw new Error('Area name cannot be empty');
+  }
+
+  // Build AppleScript to create area
+  const script = `
+    tell application "Things3"
+      -- Create new area
+      set newArea to make new area with properties {name:"${escapeAppleScript(name)}"}
+      return name of newArea
+    end tell
+  `;
+
+  const result = await executeAppleScript(script);
+  return result.trim();
+}
