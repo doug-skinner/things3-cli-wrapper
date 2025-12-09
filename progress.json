@@ -93,10 +93,10 @@
     "id": 11,
     "title": "Implement 'add-project' command for creating projects",
     "description": "Create the add-project command that creates new projects in Things 3. Accept project name as required positional argument. Use Things 3 AppleScript API to create the project. Handle case where project already exists (error or success message depending on Things 3 behavior). Consider supporting optional parameters like --area to create project within specific area, --notes for project notes, and --deadline for project deadline if Things 3 supports these on creation. Provide success confirmation with created project name. Validate that project name is not empty or invalid.",
-    "status": "In Progress",
-    "notes": "Starting work on add-project command",
+    "status": "Completed",
+    "notes": "Completed implementation: Created addProject() function with full AppleScript integration. Supports creating projects with optional area, notes, and deadline. Validates project name and deadline format. Handles area not found error gracefully. Supports both formatted and JSON output. Tested all scenarios successfully.",
     "created": "2025-12-08T20:27:53.906Z",
-    "updated": "2025-12-09T13:30:44.597Z"
+    "updated": "2025-12-09T13:32:06.886Z"
   },
   {
     "id": 12,
