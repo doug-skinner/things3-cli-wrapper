@@ -129,10 +129,10 @@
     "id": 15,
     "title": "Add CLI Install Command for Claude Skill",
     "description": "Create a new CLI command that installs the Things3 Claude Skill to the user's Claude Code skills directory, making it easy for users to enable the skill with a single command.\n\nCommand: thangs install-skill [--force] [--json]\n\nDeliverables:\n- Add new 'install-skill' command to src/index.ts using Commander.js\n- Implement installSkill() function in src/things.ts: Resolve paths (skill source to ~/.claude/skills/things3-cli-wrapper/), validate skill directory exists with SKILL.md present, check if ~/.claude/ directory exists (error if not, suggesting Claude Code installation), create ~/.claude/skills/ if it doesn't exist, handle existing installation (error without --force, overwrite with --force), copy directory recursively using Node.js fs.promises, return success message with installation path\n- Add helper functions: getSkillSourcePath() returns path to skill/ in package (handles global vs local install), getSkillDestinationPath() returns ~/.claude/skills/things3-cli-wrapper/, validateSkillDirectory() checks SKILL.md exists\n- Update package.json: Add 'skill/' to 'files' array for npm packaging\n- Support --json flag with consistent output format\n\nImplementation: Use Node.js fs.promises, path, and os modules. Handle global vs local installation via __dirname detection. Implement comprehensive error handling for: skill/ directory not found, ~/.claude doesn't exist, installation directory exists without --force, permission errors, missing SKILL.md.\n\nJSON Output Format: Success {success: true, message: 'Skill installed successfully', installPath: path, files: array}. Error {success: false, error: message, installPath: path}.\n\nAcceptance Criteria: Command thangs install-skill copies skill directory successfully, creates ~/.claude/skills/ if it doesn't exist, requires --force to overwrite existing installation, provides clear actionable error messages for all failure cases, supports --json output format, works when installed globally via npm, works during development with npm link, skill/ directory included in npm package (verify with npm pack).",
-    "status": "Not Started",
-    "notes": "",
+    "status": "In Progress",
+    "notes": "Starting work on install-skill CLI command. Will add helper functions to src/things.ts, update src/index.ts with new command, and update package.json files array.",
     "created": "2025-12-09T13:56:34.445Z",
-    "updated": "2025-12-09T13:56:34.445Z"
+    "updated": "2025-12-09T14:34:27.046Z"
   },
   {
     "id": 16,
