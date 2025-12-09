@@ -75,10 +75,10 @@
     "id": 9,
     "title": "Implement 'edit' command for updating tasks",
     "description": "Create the edit command that modifies existing tasks in Things 3. Accept task name as required positional argument to identify the task to edit. Support optional --name flag to rename the task. Support optional --notes flag to update task notes. Support optional --due flag to change due date (accept date string in YYYY-MM-DD format). Support optional --tags flag to replace tags with comma-separated list. Support optional --project flag to move task to different project by name. Support optional --area flag to move task to different area by name. Use Things 3 AppleScript API to find task by name and update specified properties. Handle case where task name is not unique (prompt user or show options). Validate date format for --due flag. Validate that target project/area exists. Provide success confirmation showing what was changed.",
-    "status": "Not Started",
-    "notes": "",
+    "status": "In Progress",
+    "notes": "Starting work on edit command for updating tasks",
     "created": "2025-12-08T20:27:30.029Z",
-    "updated": "2025-12-08T20:27:30.029Z"
+    "updated": "2025-12-09T13:23:53.847Z"
   },
   {
     "id": 10,
