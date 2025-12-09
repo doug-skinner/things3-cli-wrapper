@@ -880,3 +880,88 @@ export async function cancelTask(taskName: string): Promise<string> {
   // Unexpected result
   throw new Error(`Unexpected result from AppleScript: ${trimmedResult}`);
 }
+
+/**
+ * Options for adding a project
+ */
+export interface AddProjectOptions {
+  area?: string;       // Area to create project in
+  notes?: string;      // Project notes
+  deadline?: string;   // Project deadline (YYYY-MM-DD format)
+}
+
+/**
+ * Add a new project to Things 3
+ *
+ * @param name - Project name (required)
+ * @param options - Project options
+ * @returns The created project name
+ */
+export async function addProject(name: string, options: AddProjectOptions = {}): Promise<string> {
+  // Verify Things 3 is accessible
+  await verifyThings3Access();
+
+  // Validate project name
+  if (!name || name.trim() === '') {
+    throw new Error('Project name cannot be empty');
+  }
+
+  // Validate deadline format if provided
+  if (options.deadline && !isValidDateFormat(options.deadline)) {
+    throw new Error(`Invalid date format: ${options.deadline}. Expected YYYY-MM-DD format (e.g., 2025-12-31)`);
+  }
+
+  // Build AppleScript to create project
+  let script = `
+    tell application "Things3"
+      -- Create new project
+      set newProject to make new project with properties {name:"${escapeAppleScript(name)}"}
+  `;
+
+  // Add notes if provided
+  if (options.notes) {
+    script += `
+      set notes of newProject to "${escapeAppleScript(options.notes)}"
+    `;
+  }
+
+  // Add deadline if provided
+  if (options.deadline) {
+    script += `
+      set completion date of newProject to date "${options.deadline}"
+    `;
+  }
+
+  // Add to area if specified
+  if (options.area) {
+    script += `
+      -- Find area by name
+      try
+        set targetArea to first area whose name is "${escapeAppleScript(options.area)}"
+        set area of newProject to targetArea
+      on error
+        error "AREA_NOT_FOUND:${escapeAppleScript(options.area)}"
+      end try
+    `;
+  }
+
+  script += `
+      return name of newProject
+    end tell
+  `;
+
+  try {
+    const result = await executeAppleScript(script);
+    return result.trim();
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+
+    // Check for area not found error
+    if (errorMsg.includes('AREA_NOT_FOUND:')) {
+      const areaName = errorMsg.split('AREA_NOT_FOUND:')[1];
+      throw new Error(`Area not found: ${areaName}`);
+    }
+
+    throw error;
+  }
+}

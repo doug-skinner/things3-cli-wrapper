@@ -6,7 +6,7 @@
  */
 
 import { Command } from 'commander';
-import { listTasks, addTask, completeTask, editTask, cancelTask } from './things';
+import { listTasks, addTask, completeTask, editTask, cancelTask, addProject } from './things';
 import { displayTasksTable, displayTasksJson, displayError, displaySuccess } from './formatter';
 
 const program = new Command();
@@ -174,9 +174,27 @@ program
   .option('--notes <text>', 'Project notes')
   .option('--deadline <date>', 'Project deadline (YYYY-MM-DD format)')
   .option('--json', 'Output as JSON')
-  .action((name, options) => {
-    console.log('Add-project command called for:', name, 'with options:', options);
-    // Implementation will be added in later requirements
+  .action(async (name, options) => {
+    try {
+      const createdProjectName = await addProject(name, {
+        area: options.area,
+        notes: options.notes,
+        deadline: options.deadline,
+      });
+
+      if (options.json) {
+        console.log(JSON.stringify({ success: true, project: createdProjectName }, null, 2));
+      } else {
+        displaySuccess(`Project created: ${createdProjectName}`);
+      }
+    } catch (error) {
+      if (options.json) {
+        console.log(JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) }, null, 2));
+      } else {
+        displayError(error instanceof Error ? error.message : String(error));
+      }
+      process.exit(1);
+    }
   });
 
 // Add-area command - create new area
