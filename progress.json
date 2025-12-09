@@ -156,9 +156,9 @@
     "id": 18,
     "title": "Add GitHub Action for NPM Publishing",
     "description": "Create a GitHub Actions workflow that automatically publishes the package to NPM when a new version tag is pushed. Use the publish.yml workflow from coding-agent-progress-manager as a reference.\n\nDeliverables:\n- Create .github/workflows/ directory structure\n- Create .github/workflows/publish.yml workflow file\n- Configure workflow to trigger on version tags (v*)\n- Set up Node.js environment (use Node 18+)\n- Install dependencies with npm ci\n- Run TypeScript build (npm run build)\n- Publish to NPM with --access public flag\n- Use NODE_AUTH_TOKEN secret for authentication\n- Set proper permissions (contents: read, id-token: write)\n\nImplementation Notes:\n- Workflow should run on ubuntu-latest\n- Use actions/checkout@v4 for code checkout\n- Use actions/setup-node@v4 with registry-url set to https://registry.npmjs.org\n- Package is scoped (@dougskinner/thangs) so requires --access public\n- No validation step needed (unlike cap-manager which has validate-progress.js)\n- Build step compiles TypeScript to dist/ directory\n- NPM_TOKEN secret must be configured in GitHub repository settings\n\nTesting:\n- Workflow will be tested when first version tag (e.g., v0.1.0) is pushed\n- Can be tested locally by running: npm ci && npm run build && npm pack\n- Verify package contents with: tar -tzf dougskinner-thangs-*.tgz\n\nAcceptance Criteria:\n- .github/workflows/publish.yml created with correct structure\n- Workflow triggers on version tags (v*)\n- All steps are properly configured\n- Workflow uses NPM_TOKEN secret for authentication\n- Package publishes successfully to NPM when tag is pushed",
-    "status": "Not Started",
-    "notes": "",
+    "status": "In Progress",
+    "notes": "Starting work on GitHub Actions workflow for NPM publishing",
     "created": "2025-12-09T14:54:58.620Z",
-    "updated": "2025-12-09T14:54:58.620Z"
+    "updated": "2025-12-09T14:55:09.926Z"
   }
 ]
