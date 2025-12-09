@@ -383,3 +383,118 @@ function isValidDateFormat(dateStr: string): boolean {
   const date = new Date(dateStr);
   return !Number.isNaN(date.getTime());
 }
+
+/**
+ * Complete a task in Things 3 by name
+ *
+ * @param taskName - Name of the task to complete
+ * @returns The completed task name
+ * @throws Error if task not found, multiple tasks found, or other issues
+ */
+export async function completeTask(taskName: string): Promise<string> {
+  // Verify Things 3 is accessible
+  await verifyThings3Access();
+
+  // Find tasks with matching name
+  const script = `
+    tell application "Things3"
+      -- Find all to-dos with matching name (case-insensitive)
+      set matchingTasks to (to dos whose name is "${escapeAppleScript(taskName)}")
+
+      -- Check how many tasks matched
+      set taskCount to count of matchingTasks
+
+      if taskCount is 0 then
+        error "Task not found: ${escapeAppleScript(taskName)}"
+      else if taskCount > 1 then
+        -- Multiple tasks found - return their details
+        set output to "MULTIPLE:"
+        repeat with t in matchingTasks
+          set output to output & "ID:" & id of t & "|NAME:" & name of t & "|STATUS:" & status of t
+
+          -- Add project if exists
+          try
+            set taskProject to name of project of t
+            if taskProject is not missing value then
+              set output to output & "|PROJECT:" & taskProject
+            end if
+          end try
+
+          -- Add area if exists
+          try
+            set taskArea to name of area of t
+            if taskArea is not missing value then
+              set output to output & "|AREA:" & taskArea
+            end if
+          end try
+
+          set output to output & "||"
+        end repeat
+        return output
+      else
+        -- Single task found
+        set theTask to first item of matchingTasks
+        set taskStatus to status of theTask
+
+        -- Check if already completed
+        if taskStatus is completed then
+          return "ALREADY_COMPLETED:" & name of theTask
+        end if
+
+        -- Mark as completed
+        set status of theTask to completed
+        return "COMPLETED:" & name of theTask
+      end if
+    end tell
+  `;
+
+  const result = await executeAppleScript(script);
+  const trimmedResult = result.trim();
+
+  // Handle multiple tasks found
+  if (trimmedResult.startsWith('MULTIPLE:')) {
+    const tasksData = trimmedResult.substring('MULTIPLE:'.length);
+    const tasks = tasksData.split('||').filter(t => t.trim() !== '');
+
+    let errorMsg = `Multiple tasks found with name "${taskName}":\n`;
+    tasks.forEach((taskData, index) => {
+      const fields: Record<string, string> = {};
+      const parts = taskData.split('|');
+
+      for (const part of parts) {
+        const colonIndex = part.indexOf(':');
+        if (colonIndex !== -1) {
+          const key = part.substring(0, colonIndex);
+          const value = part.substring(colonIndex + 1);
+          fields[key] = value;
+        }
+      }
+
+      errorMsg += `  ${index + 1}. ${fields.NAME} (Status: ${fields.STATUS}`;
+      if (fields.PROJECT) {
+        errorMsg += `, Project: ${fields.PROJECT}`;
+      }
+      if (fields.AREA) {
+        errorMsg += `, Area: ${fields.AREA}`;
+      }
+      errorMsg += ')\n';
+    });
+
+    errorMsg += '\nPlease be more specific or use unique task names.';
+    throw new Error(errorMsg);
+  }
+
+  // Handle already completed
+  if (trimmedResult.startsWith('ALREADY_COMPLETED:')) {
+    const taskName = trimmedResult.substring('ALREADY_COMPLETED:'.length);
+    throw new Error(`Task "${taskName}" is already completed`);
+  }
+
+  // Handle success
+  if (trimmedResult.startsWith('COMPLETED:')) {
+    return trimmedResult.substring('COMPLETED:'.length);
+  }
+
+  // Unexpected result
+  throw new Error(`Unexpected result from AppleScript: ${trimmedResult}`);
+}

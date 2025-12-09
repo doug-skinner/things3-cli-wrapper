@@ -6,7 +6,7 @@
  */
 
 import { Command } from 'commander';
-import { listTasks, addTask } from './things';
+import { listTasks, addTask, completeTask } from './things';
 import { displayTasksTable, displayTasksJson, displayError, displaySuccess } from './formatter';
 
 const program = new Command();
@@ -102,9 +102,23 @@ program
   .command('complete <task>')
   .description('Mark a task as completed in Things 3')
   .option('--json', 'Output as JSON')
-  .action((task, options) => {
-    console.log('Complete command called for:', task, 'with options:', options);
-    // Implementation will be added in later requirements
+  .action(async (task, options) => {
+    try {
+      const completedTaskName = await completeTask(task);
+
+      if (options.json) {
+        console.log(JSON.stringify({ success: true, task: completedTaskName }, null, 2));
+      } else {
+        displaySuccess(`Task completed: ${completedTaskName}`);
+      }
+    } catch (error) {
+      if (options.json) {
+        console.log(JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) }, null, 2));
+      } else {
+        displayError(error instanceof Error ? error.message : String(error));
+      }
+      process.exit(1);
+    }
   });
 
 // Cancel command - cancel task
