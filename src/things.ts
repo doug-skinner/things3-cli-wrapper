@@ -996,3 +996,197 @@ export async function addArea(name: string): Promise<string> {
   const result = await executeAppleScript(script);
   return result.trim();
 }
+
+/**
+ * Get the source path of the skill directory
+ * Handles both global and local installations
+ *
+ * @returns Absolute path to the skill/ directory
+ */
+export function getSkillSourcePath(): string {
+  // __dirname in compiled code is in dist/, so skill/ is one level up
+  return path.join(__dirname, '..', 'skill');
+}
+
+/**
+ * Get the destination path for the skill installation
+ *
+ * @returns Absolute path to ~/.claude/skills/things3-cli-wrapper/
+ */
+export function getSkillDestinationPath(): string {
+  const homeDir = os.homedir();
+  return path.join(homeDir, '.claude', 'skills', 'things3-cli-wrapper');
+}
+
+/**
+ * Validate that the skill directory exists and contains required files
+ *
+ * @param skillPath - Path to the skill directory
+ * @throws Error if validation fails
+ */
+export async function validateSkillDirectory(skillPath: string): Promise<void> {
+  try {
+    // Check if directory exists
+    const stats = await fs.stat(skillPath);
+    if (!stats.isDirectory()) {
+      throw new Error(`Skill path is not a directory: ${skillPath}`);
+    }
+
+    // Check if SKILL.md exists
+    const skillMdPath = path.join(skillPath, 'SKILL.md');
+    await fs.access(skillMdPath);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      throw new Error(
+        'Skill directory not found. This package may not include the skill files. ' +
+        'Please ensure you\'re using a published version or the skill/ directory exists.'
+      );
+    }
+    throw error;
+  }
+}
+
+/**
+ * Options for installing the skill
+ */
+export interface InstallSkillOptions {
+  force?: boolean;
+}
+
+/**
+ * Result of skill installation
+ */
+export interface InstallSkillResult {
+  success: boolean;
+  message?: string;
+  installPath?: string;
+  files?: string[];
+  error?: string;
+}
+
+/**
+ * Install the Things3 Claude Skill to ~/.claude/skills/
+ *
+ * @param options - Installation options
+ * @returns Installation result
+ */
+export async function installSkill(options: InstallSkillOptions = {}): Promise<InstallSkillResult> {
+  try {
+    // Get source and destination paths
+    const sourcePath = getSkillSourcePath();
+    const destPath = getSkillDestinationPath();
+
+    // Validate skill directory exists
+    await validateSkillDirectory(sourcePath);
+
+    // Check if ~/.claude/ exists
+    const claudeDir = path.join(os.homedir(), '.claude');
+    try {
+      await fs.access(claudeDir);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        return {
+          success: false,
+          error: 'Claude Code configuration directory (~/.claude/) not found. ' +
+            'Please ensure Claude Code is installed. Visit https://claude.com/code for installation instructions.',
+          installPath: destPath,
+        };
+      }
+      throw error;
+    }
+
+    // Check if destination already exists
+    try {
+      await fs.access(destPath);
+      // Destination exists
+      if (!options.force) {
+        return {
+          success: false,
+          error: `Skill already installed at ${destPath}. Use --force to overwrite.`,
+          installPath: destPath,
+        };
+      }
+      // Force mode - remove existing directory
+      await fs.rm(destPath, { recursive: true, force: true });
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+        throw error;
+      }
+      // Destination doesn't exist - this is fine
+    }
+
+    // Create ~/.claude/skills/ directory if it doesn't exist
+    const skillsDir = path.join(claudeDir, 'skills');
+    await fs.mkdir(skillsDir, { recursive: true });
+
+    // Copy skill directory recursively
+    await copyDirectory(sourcePath, destPath);
+
+    // Get list of installed files
+    const files = await getFilesRecursively(destPath);
+
+    return {
+      success: true,
+      message: 'Skill installed successfully',
+      installPath: destPath,
+      files: files.map(f => path.relative(destPath, f)),
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+      installPath: getSkillDestinationPath(),
+    };
+  }
+}
+
+/**
+ * Copy a directory recursively
+ *
+ * @param src - Source directory path
+ * @param dest - Destination directory path
+ */
+async function copyDirectory(src: string, dest: string): Promise<void> {
+  // Create destination directory
+  await fs.mkdir(dest, { recursive: true });
+
+  // Read source directory
+  const entries = await fs.readdir(src, { withFileTypes: true });
+
+  // Copy each entry
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      // Recursively copy subdirectory
+      await copyDirectory(srcPath, destPath);
+    } else {
+      // Copy file
+      await fs.copyFile(srcPath, destPath);
+    }
+  }
+}
+
+/**
+ * Get all files in a directory recursively
+ *
+ * @param dir - Directory path
+ * @returns Array of file paths
+ */
+async function getFilesRecursively(dir: string): Promise<string[]> {
+  const files: string[] = [];
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      const subFiles = await getFilesRecursively(fullPath);
+      files.push(...subFiles);
+    } else {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
