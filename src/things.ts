@@ -504,3 +504,229 @@ export async function completeTask(taskName: string): Promise<string> {
   // Unexpected result
   throw new Error(`Unexpected result from AppleScript: ${trimmedResult}`);
 }
+
+/**
+ * Options for editing a task
+ */
+export interface EditTaskOptions {
+  name?: string;       // New task name
+  notes?: string;      // New notes
+  due?: string;        // New due date (YYYY-MM-DD format)
+  tags?: string;       // New tags (comma-separated, replaces existing)
+  project?: string;    // Move to different project
+  area?: string;       // Move to different area
+}
+
+/**
+ * Edit an existing task in Things 3 by name
+ *
+ * @param taskName - Name of the task to edit
+ * @param options - Properties to update
+ * @returns Summary of changes made
+ * @throws Error if task not found, multiple tasks found, or validation fails
+ */
+export async function editTask(taskName: string, options: EditTaskOptions = {}): Promise<string> {
+  // Verify Things 3 is accessible
+  await verifyThings3Access();
+
+  // Validate that at least one option is provided
+  if (!options.name && !options.notes && !options.due && !options.tags && !options.project && !options.area) {
+    throw new Error('No changes specified. Please provide at least one option to update (--name, --notes, --due, --tags, --project, or --area)');
+  }
+
+  // Validate date format if provided
+  if (options.due && !isValidDateFormat(options.due)) {
+    throw new Error(`Invalid date format: ${options.due}. Expected YYYY-MM-DD format (e.g., 2025-12-31)`);
+  }
+
+  // First, find the task to ensure it exists and is unique
+  const findScript = `
+    tell application "Things3"
+      set matchingTasks to (to dos whose name is "${escapeAppleScript(taskName)}")
+      set taskCount to count of matchingTasks
+
+      if taskCount is 0 then
+        return "NOT_FOUND:" & "${escapeAppleScript(taskName)}"
+      else if taskCount > 1 then
+        set output to "MULTIPLE:"
+        repeat with t in matchingTasks
+          set output to output & "ID:" & id of t & "|NAME:" & name of t & "|STATUS:" & status of t
+          try
+            set taskProject to name of project of t
+            if taskProject is not missing value then
+              set output to output & "|PROJECT:" & taskProject
+            end if
+          end try
+          try
+            set taskArea to name of area of t
+            if taskArea is not missing value then
+              set output to output & "|AREA:" & taskArea
+            end if
+          end try
+          set output to output & "||"
+        end repeat
+        return output
+      else
+        return "FOUND:" & id of (first item of matchingTasks)
+      end if
+    end tell
+  `;
+
+  const findResult = await executeAppleScript(findScript);
+  const trimmedResult = findResult.trim();
+
+  // Handle task not found
+  if (trimmedResult.startsWith('NOT_FOUND:')) {
+    const taskName = trimmedResult.substring('NOT_FOUND:'.length);
+    throw new Error(`Task not found: ${taskName}`);
+  }
+
+  // Handle multiple tasks
+  if (trimmedResult.startsWith('MULTIPLE:')) {
+    const tasksData = trimmedResult.substring('MULTIPLE:'.length);
+    const tasks = tasksData.split('||').filter(t => t.trim() !== '');
+
+    let errorMsg = `Multiple tasks found with name "${taskName}":\n`;
+    tasks.forEach((taskData, index) => {
+      const fields: Record<string, string> = {};
+      const parts = taskData.split('|');
+
+      for (const part of parts) {
+        const colonIndex = part.indexOf(':');
+        if (colonIndex !== -1) {
+          const key = part.substring(0, colonIndex);
+          const value = part.substring(colonIndex + 1);
+          fields[key] = value;
+        }
+      }
+
+      errorMsg += `  ${index + 1}. ${fields.NAME} (Status: ${fields.STATUS}`;
+      if (fields.PROJECT) {
+        errorMsg += `, Project: ${fields.PROJECT}`;
+      }
+      if (fields.AREA) {
+        errorMsg += `, Area: ${fields.AREA}`;
+      }
+      errorMsg += ')\n';
+    });
+
+    errorMsg += '\nPlease be more specific or use unique task names.';
+    throw new Error(errorMsg);
+  }
+
+  // Extract task ID
+  const taskId = trimmedResult.substring('FOUND:'.length);
+
+  // Build update script
+  let updateScript = `
+    tell application "Things3"
+      set theTask to to do id "${taskId}"
+  `;
+
+  const changes: string[] = [];
+
+  // Update name if provided
+  if (options.name) {
+    updateScript += `
+      set name of theTask to "${escapeAppleScript(options.name)}"
+    `;
+    changes.push(`name changed to "${options.name}"`);
+  }
+
+  // Update notes if provided
+  if (options.notes !== undefined) {
+    updateScript += `
+      set notes of theTask to "${escapeAppleScript(options.notes)}"
+    `;
+    changes.push('notes updated');
+  }
+
+  // Update due date if provided
+  if (options.due) {
+    updateScript += `
+      set due date of theTask to date "${options.due}"
+    `;
+    changes.push(`due date set to ${options.due}`);
+  }
+
+  // Update tags if provided
+  if (options.tags !== undefined) {
+    const tagList = options.tags.split(',').map(t => t.trim()).filter(t => t !== '');
+
+    // Clear existing tags first
+    updateScript += `
+      set tag names of theTask to {}
+    `;
+
+    // Add new tags
+    if (tagList.length > 0) {
+      for (const tag of tagList) {
+        updateScript += `
+          try
+            set targetTag to first tag whose name is "${escapeAppleScript(tag)}"
+          on error
+            set targetTag to make new tag with properties {name:"${escapeAppleScript(tag)}"}
+          end try
+          tell theTask
+            set tag names to (tag names & "${escapeAppleScript(tag)}")
+          end tell
+        `;
+      }
+      changes.push(`tags set to: ${options.tags}`);
+    } else {
+      changes.push('tags cleared');
+    }
+  }
+
+  // Move to project if specified
+  if (options.project) {
+    updateScript += `
+      try
+        set targetProject to first project whose name is "${escapeAppleScript(options.project)}"
+        move theTask to targetProject
+      on error
+        error "PROJECT_NOT_FOUND:${escapeAppleScript(options.project)}"
+      end try
+    `;
+    changes.push(`moved to project "${options.project}"`);
+  }
+
+  // Move to area if specified
+  if (options.area) {
+    updateScript += `
+      try
+        set targetArea to first area whose name is "${escapeAppleScript(options.area)}"
+        set area of theTask to targetArea
+      on error
+        error "AREA_NOT_FOUND:${escapeAppleScript(options.area)}"
+      end try
+    `;
+    changes.push(`moved to area "${options.area}"`);
+  }
+
+  updateScript += `
+      return name of theTask
+    end tell
+  `;
+
+  try {
+    const result = await executeAppleScript(updateScript);
+    const finalTaskName = result.trim();
+
+    return `Task "${finalTaskName}" updated: ${changes.join(', ')}`;
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+
+    // Check for project/area not found errors
+    if (errorMsg.includes('PROJECT_NOT_FOUND:')) {
+      const projectName = errorMsg.split('PROJECT_NOT_FOUND:')[1];
+      throw new Error(`Project not found: ${projectName}`);
+    }
+    if (errorMsg.includes('AREA_NOT_FOUND:')) {
+      const areaName = errorMsg.split('AREA_NOT_FOUND:')[1];
+      throw new Error(`Area not found: ${areaName}`);
+    }
+
+    throw error;
+  }
+}

@@ -6,7 +6,7 @@
  */
 
 import { Command } from 'commander';
-import { listTasks, addTask, completeTask } from './things';
+import { listTasks, addTask, completeTask, editTask } from './things';
 import { displayTasksTable, displayTasksJson, displayError, displaySuccess } from './formatter';
 
 const program = new Command();
@@ -92,9 +92,30 @@ program
   .option('--project <name>', 'Move to different project by name')
   .option('--area <name>', 'Move to different area by name')
   .option('--json', 'Output as JSON')
-  .action((task, options) => {
-    console.log('Edit command called for:', task, 'with options:', options);
-    // Implementation will be added in later requirements
+  .action(async (task, options) => {
+    try {
+      const result = await editTask(task, {
+        name: options.name,
+        notes: options.notes,
+        due: options.due,
+        tags: options.tags,
+        project: options.project,
+        area: options.area,
+      });
+
+      if (options.json) {
+        console.log(JSON.stringify({ success: true, message: result }, null, 2));
+      } else {
+        displaySuccess(result);
+      }
+    } catch (error) {
+      if (options.json) {
+        console.log(JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) }, null, 2));
+      } else {
+        displayError(error instanceof Error ? error.message : String(error));
+      }
+      process.exit(1);
+    }
   });
 
 // Complete command - mark task as done
