@@ -138,10 +138,10 @@
     "id": 16,
     "title": "Update Main README with Claude Code Integration",
     "description": "Update the main repository README to explain the Claude Skill feature, installation process, and usage examples for end users.\n\nDeliverables:\n- Add new section to README.md: 'Claude Code Integration' (after Usage section). Explain what a Claude Skill is and its value, installation instructions using 'thangs install-skill', update instructions using 'thangs install-skill --force', verification steps (check ~/.claude/skills/things3-cli-wrapper/), usage examples showing natural language requests to Claude, what the skill teaches Claude (commands, concepts, workflows), reference to skill/README.md for developers\n- Update table of contents if present\n- Ensure examples match the skill's teaching style and terminology\n\nSection Content should include: Overview of Claude Skills, installation commands, verification steps, natural language usage examples, list of what Claude learns from the skill.\n\nAcceptance Criteria: README clearly explains skill feature and benefits to end users, installation instructions are accurate and testable, usage examples are realistic and match skill capabilities, users understand how to verify skill installation, documentation follows existing README style and tone, section is appropriately placed in README flow.",
-    "status": "In Progress",
-    "notes": "Starting work on updating main README with Claude Code Integration section",
+    "status": "Completed",
+    "notes": "Completed implementation: Added comprehensive Claude Code Integration section to main README.md. Section includes: overview of Claude Skills and their value, installation instructions (thangs install-skill), update instructions (thangs install-skill --force), verification steps (listing ~/.claude/skills/things3-cli-wrapper/), natural language usage examples showing Claude integration, detailed list of what Claude learns from the skill (8 commands, filtering, properties, workflows, error handling), reference to skill/README.md for developers. Section is appropriately placed after Usage section, follows existing README style and tone, and provides clear actionable instructions for end users.",
     "created": "2025-12-09T13:56:45.731Z",
-    "updated": "2025-12-09T14:45:08.151Z"
+    "updated": "2025-12-09T14:45:56.165Z"
   },
   {
     "id": 17,
