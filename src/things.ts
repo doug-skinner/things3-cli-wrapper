@@ -184,7 +184,7 @@ function parseAppleScriptTaskList(result: string): Things3Task[] {
 					task.id = value;
 					break;
 				case "NAME":
-					task.name = value;
+					task.name = value.trim();
 					break;
 				case "STATUS":
 					task.status = value as "open" | "completed" | "canceled";
